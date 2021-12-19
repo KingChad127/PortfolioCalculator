@@ -1,12 +1,9 @@
 package Transactions;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
-public class TransactionLog {
+public class TransactionLog implements Iterable<Transaction>{
     Set<Transaction> log;
 
     public TransactionLog() {
@@ -91,5 +88,10 @@ public class TransactionLog {
             output.append(t.toString()).append("\n");
         }
         return output.toString();
+    }
+
+    @Override
+    public Iterator<Transaction> iterator() {
+        return log.iterator();
     }
 }
