@@ -69,4 +69,9 @@ class TransactionLogTest {
     Assertions.assertEquals(new TreeSet<>(Arrays.asList(transactions[4], transactions[2])),
         log.sells());
   }
+
+  @Test
+  void testPrintOutPut() {
+    System.out.println(log);
+  }
 }
