@@ -1,4 +1,4 @@
-package Transactions;
+package achadaga.stockportfolio.transactions;
 
 import java.time.LocalDate;
 

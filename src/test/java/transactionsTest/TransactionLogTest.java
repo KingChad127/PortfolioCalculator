@@ -1,6 +1,10 @@
-package Transactions;
+package transactionsTest;
 
 import org.junit.jupiter.api.Test;
+import achadaga.stockportfolio.transactions.Buy;
+import achadaga.stockportfolio.transactions.Sell;
+import achadaga.stockportfolio.transactions.Transaction;
+import achadaga.stockportfolio.transactions.TransactionLog;
 
 import java.time.LocalDate;
 import java.util.Arrays;

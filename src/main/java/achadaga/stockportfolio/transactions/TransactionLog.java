@@ -1,4 +1,4 @@
-package Transactions;
+package achadaga.stockportfolio.transactions;
 
 import java.time.LocalDate;
 import java.util.Iterator;
@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class TransactionLog implements Iterable<Transaction> {
-    Set<Transaction> log;
+    private final Set<Transaction> log;
 
     public TransactionLog() {
         log = new TreeSet<>();
