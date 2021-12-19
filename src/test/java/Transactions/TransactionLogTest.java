@@ -4,9 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,8 +38,7 @@ class TransactionLogTest {
         log.addTransaction(t2);
         log.addTransaction(t3);
         log.addTransaction(t4);
-        assertEquals(new TreeSet<>(Arrays.asList(t1, t2, t3, t4)),
-                log.searchByTicker("AAPL"));
+        assertEquals(new TreeSet<>(Arrays.asList(t1, t2, t3, t4)), log.searchByTicker("AAPL"));
     }
 
 }
