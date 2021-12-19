@@ -1,7 +1,9 @@
 package Transactions;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class TransactionLog implements Iterable<Transaction>{
     Set<Transaction> log;
@@ -31,8 +33,8 @@ public class TransactionLog implements Iterable<Transaction>{
      * @param end   the ending date
      * @return a list of all Transactions that were made in this date range
      */
-    public List<Transaction> searchByDate(LocalDate start, LocalDate end) {
-        List<Transaction> results = new ArrayList<>();
+    public TreeSet<Transaction> searchByDate(LocalDate start, LocalDate end) {
+        TreeSet<Transaction> results = new TreeSet<>();
         for (Transaction t : log) {
             if (t.getDate().compareTo(start) >= 0 && t.getDate().compareTo(end) <= 0) {
                 results.add(t);
@@ -58,8 +60,8 @@ public class TransactionLog implements Iterable<Transaction>{
     /**
      * @return a list of all buy transactions
      */
-    public List<Transaction> listBuy() {
-        List<Transaction> results = new ArrayList<>();
+    public TreeSet<Transaction> buys() {
+        TreeSet<Transaction> results = new TreeSet<>();
         for (Transaction t : log) {
             if (t instanceof Buy) {
                 results.add(t);
@@ -71,8 +73,8 @@ public class TransactionLog implements Iterable<Transaction>{
     /**
      * @return a list of all sale transactions
      */
-    public List<Transaction> listSell() {
-        List<Transaction> results = new ArrayList<>();
+    public TreeSet<Transaction> sells() {
+        TreeSet<Transaction> results = new TreeSet<>();
         for (Transaction t : log) {
             if (t instanceof Sell) {
                 results.add(t);
