@@ -1,12 +1,14 @@
 package achadaga.stockportfolio.transactions;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public abstract class Transaction implements Comparable<Transaction>{
     private final String ticker;
     private final double price;
     private final double quantity; // support fractional shares as well
     private final LocalDate date;
+    private final UUID transactionID;
 
     public static final int WIDTH = 40;
 
@@ -15,6 +17,7 @@ public abstract class Transaction implements Comparable<Transaction>{
         this.price = price;
         this.quantity = quantity;
         this.date = date;
+        this.transactionID = UUID.randomUUID();
     }
 
     public String getTicker() {
@@ -40,6 +43,16 @@ public abstract class Transaction implements Comparable<Transaction>{
      */
     @Override
     public int compareTo(Transaction other) {
-        return other.date.compareTo(this.getDate());
+        int dateComparison = other.date.compareTo(this.getDate());
+        if (dateComparison != 0) {
+            return dateComparison;
+        } else {
+            return other.transactionID.compareTo(this.transactionID);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "\n" + getDate().toString() + "\n\ttransactionID: " + transactionID;
     }
 }
