@@ -2,7 +2,6 @@ package Transactions;
 
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.TreeSet;
@@ -13,8 +12,8 @@ class TransactionLogTest {
 
     @Test
     void testAddTransaction() {
-        Transaction t1 = new Buy("AAPL", new BigDecimal("139.50"), 3, LocalDate.of(2021, 7, 20));
-        Transaction t2 = new Sell("AAPL", new BigDecimal("145.70"), 1, LocalDate.of(2021, 7, 30));
+        Transaction t1 = new Buy("AAPL", 139.50, 3, LocalDate.of(2021, 7, 20));
+        Transaction t2 = new Sell("AAPL", 145.70, 1, LocalDate.of(2021, 7, 30));
         TransactionLog log = new TransactionLog();
         log.addTransaction(t1);
         log.addTransaction(t2);
@@ -28,8 +27,8 @@ class TransactionLogTest {
 
     @Test
     void testTotalTransactions() {
-        Transaction t1 = new Buy("AAPL", new BigDecimal("139.50"), 3, LocalDate.of(2021, 7, 20));
-        Transaction t2 = new Sell("AAPL", new BigDecimal("145.70"), 1, LocalDate.of(2021, 7, 30));
+        Transaction t1 = new Buy("AAPL", 139.50, 3, LocalDate.of(2021, 7, 20));
+        Transaction t2 = new Sell("AAPL", 145.70, 1, LocalDate.of(2021, 7, 30));
         TransactionLog log = new TransactionLog();
         log.addTransaction(t1);
         log.addTransaction(t2);
@@ -38,10 +37,10 @@ class TransactionLogTest {
 
     @Test
     void testSearchByDate() {
-        Transaction t1 = new Buy("AAPL", new BigDecimal("105.50"), 3, LocalDate.of(2020, 2, 20));
-        Transaction t2 = new Buy("NVDA", new BigDecimal("330.45"), 3, LocalDate.of(2021, 7, 6));
-        Transaction t3 = new Sell("MSFT", new BigDecimal("356.10"), 6, LocalDate.of(2021, 8, 4));
-        Transaction t4 = new Sell("GOOG", new BigDecimal("2567.67"), 1, LocalDate.of(2021, 10, 17));
+        Transaction t1 = new Buy("AAPL", 105.50, 3, LocalDate.of(2020, 2, 20));
+        Transaction t2 = new Buy("NVDA", 330.45, 3, LocalDate.of(2021, 7, 6));
+        Transaction t3 = new Sell("MSFT", 356.10, 6, LocalDate.of(2021, 8, 4));
+        Transaction t4 = new Sell("GOOG", 2567.6, 1, LocalDate.of(2021, 10, 17));
         TransactionLog log = new TransactionLog();
         log.addTransaction(t1);
         log.addTransaction(t2);
@@ -53,10 +52,10 @@ class TransactionLogTest {
 
     @Test
     void testSearchByTicker() {
-        Transaction t1 = new Buy("AAPL", new BigDecimal("139.50"), 3, LocalDate.of(2021, 7, 20));
-        Transaction t2 = new Buy("AAPL", new BigDecimal("140.50"), 3, LocalDate.of(2021, 7, 6));
-        Transaction t3 = new Sell("AAPL", new BigDecimal("142.33"), 6, LocalDate.of(2021, 8, 4));
-        Transaction t4 = new Sell("AAPL", new BigDecimal("145.70"), 1, LocalDate.of(2021, 10, 17));
+        Transaction t1 = new Buy("AAPL", 139.50, 3, LocalDate.of(2021, 7, 20));
+        Transaction t2 = new Buy("AAPL", 140.50, 3, LocalDate.of(2021, 7, 6));
+        Transaction t3 = new Sell("AAPL", 142.33, 6, LocalDate.of(2021, 8, 4));
+        Transaction t4 = new Sell("AAPL", 145.70, 1, LocalDate.of(2021, 10, 17));
         TransactionLog log = new TransactionLog();
         log.addTransaction(t1);
         log.addTransaction(t2);
@@ -67,11 +66,11 @@ class TransactionLogTest {
 
     @Test
     void testTotalBuysAndSells() {
-        Transaction t1 = new Buy("AAPL", new BigDecimal("139.50"), 3, LocalDate.of(2021, 7, 20));
-        Transaction t2 = new Buy("AAPL", new BigDecimal("140.50"), 3, LocalDate.of(2021, 7, 6));
-        Transaction t3 = new Sell("AAPL", new BigDecimal("142.33"), 6, LocalDate.of(2021, 8, 4));
-        Transaction t4 = new Sell("AAPL", new BigDecimal("145.70"), 1, LocalDate.of(2021, 10, 17));
-        Transaction t5 = new Sell("AAPL", new BigDecimal("171.50"), 3, LocalDate.of(2021, 11, 19));
+        Transaction t1 = new Buy("AAPL", 139.50, 3, LocalDate.of(2021, 7, 20));
+        Transaction t2 = new Buy("AAPL", 140.50, 3, LocalDate.of(2021, 7, 6));
+        Transaction t3 = new Sell("AAPL", 142.33, 6, LocalDate.of(2021, 8, 4));
+        Transaction t4 = new Sell("AAPL", 145.70, 1, LocalDate.of(2021, 10, 17));
+        Transaction t5 = new Sell("AAPL", 171.50, 3, LocalDate.of(2021, 11, 19));
         TransactionLog log = new TransactionLog();
         log.addTransaction(t1);
         log.addTransaction(t2);
