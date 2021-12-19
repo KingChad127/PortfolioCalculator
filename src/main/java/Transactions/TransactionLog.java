@@ -45,8 +45,8 @@ public class TransactionLog implements Iterable<Transaction>{
      * @param ticker the target ticker to list all transactions for
      * @return a list of all transactions of this stock
      */
-    public List<Transaction> searchByTicker(String ticker) {
-        List<Transaction> results = new ArrayList<>();
+    public TreeSet<Transaction> searchByTicker(String ticker) {
+        TreeSet<Transaction> results = new TreeSet<>();
         for (Transaction t : log) {
             if (t.getTicker().equals(ticker)) {
                 results.add(t);
