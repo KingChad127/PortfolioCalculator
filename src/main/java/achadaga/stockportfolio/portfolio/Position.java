@@ -1,13 +1,13 @@
 package achadaga.stockportfolio.portfolio;
 
 import achadaga.stockportfolio.transactions.Buy;
+import achadaga.stockportfolio.transactions.Sell;
 import achadaga.stockportfolio.transactions.Transaction;
-import yahoofinance.YahooFinance;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.TreeSet;
+import yahoofinance.YahooFinance;
 
 public class Position {
     private final String ticker;
@@ -24,9 +24,17 @@ public class Position {
         this.history = new TreeSet<>();
     }
 
+    /**
+     * Add a buy transaction to this position
+     *
+     * @param t buy transaction
+     */
     public void addBuy(Buy t) {
         history.add(t);
+    }
 
+    public void addSell(Sell t) {
+        history.add(t);
     }
 
     /**
