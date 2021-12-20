@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import yahoofinance.YahooFinance;
 
-public class Position implements Comparable<Position>{
+public class Position implements Comparable<Position> {
 
   private final String ticker;
   private final Set<Transaction> history; // contains all transactions of this ticker
@@ -53,6 +53,10 @@ public class Position implements Comparable<Position>{
    */
   public BigDecimal getTotalUnrealized() {
     return currentPrice().subtract(avgCostPerShare).multiply(totalSharesHeld);
+  }
+
+  public String getTicker() {
+    return ticker;
   }
 
   public BigDecimal getTotalSharesHeld() {
