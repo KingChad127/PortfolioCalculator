@@ -1,14 +1,11 @@
-import achadaga.stockportfolio.transactions.Buy;
-import achadaga.stockportfolio.transactions.Sell;
-import achadaga.stockportfolio.transactions.Transaction;
-import achadaga.stockportfolio.transactions.TransactionLog;
+package achadaga.stockportfolio.transactions;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.TreeSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 
 class TransactionLogTest {
 

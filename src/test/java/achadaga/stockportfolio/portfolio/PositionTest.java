@@ -1,4 +1,5 @@
-import achadaga.stockportfolio.portfolio.Position;
+package achadaga.stockportfolio.portfolio;
+
 import achadaga.stockportfolio.transactions.Buy;
 import achadaga.stockportfolio.transactions.Sell;
 import achadaga.stockportfolio.transactions.Transaction;
@@ -43,4 +44,5 @@ class PositionTest {
   void testToString() {
     System.out.println(aapl);
   }
+
 }
