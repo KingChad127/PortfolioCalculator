@@ -1,4 +1,32 @@
 package achadaga.stockportfolio.portfolio;
 
+import achadaga.stockportfolio.transactions.Transaction;
+import java.util.Map;
+import java.util.TreeMap;
+
 public class Portfolio {
+
+  private final Map<String, Position> positions;
+  private final String user;
+
+  public Portfolio(String user) {
+    this.user = user;
+    this.positions = new TreeMap<>();
+  }
+
+  public void addPosition(Transaction t) {
+    if (positions.get(t.getTicker()) == null) {
+      positions.put(t.getTicker(), new Position(t.getTicker()));
+    }
+    positions.get(t.getTicker()).addTransaction(t);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder output = new StringBuilder(user + "'s Portfolio");
+    for (Position p : positions.values()) {
+      output.append(p.toString()).append('\n');
+    }
+    return output.toString();
+  }
 }

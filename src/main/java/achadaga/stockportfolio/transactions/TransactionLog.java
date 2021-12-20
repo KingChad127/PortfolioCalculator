@@ -1,6 +1,5 @@
 package achadaga.stockportfolio.transactions;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.Set;
@@ -12,29 +11,6 @@ public class TransactionLog implements Iterable<Transaction> {
 
   public TransactionLog() {
     log = new TreeSet<>();
-  }
-
-  public static void main(String[] args) {
-    Transaction t1 = new Buy("AAPL", new BigDecimal("139.5"), new BigDecimal("3"),
-        LocalDate.of(2021, 7, 20));
-    Transaction t2 = new Buy("AAPL", new BigDecimal("140.5"), new BigDecimal("3"),
-        LocalDate.of(2021, 7, 6));
-    Transaction t3 = new Sell("AAPL", new BigDecimal("142.3367"), new BigDecimal("6"),
-        LocalDate.of(2021, 8, 4));
-    Transaction t4 = new Sell("AAPL", new BigDecimal("145.70"), new BigDecimal("6"),
-        LocalDate.of(2021, 10, 17));
-    Transaction t5 = new Sell("AAPL", new BigDecimal("171.50"), new BigDecimal("3"),
-        LocalDate.of(2021, 11, 19));
-    Transaction t6 = new Sell("AAPL", new BigDecimal("172.50"), new BigDecimal("5"),
-        LocalDate.of(2021, 11, 19));
-    TransactionLog log = new TransactionLog();
-    log.addTransaction(t1);
-    log.addTransaction(t2);
-    log.addTransaction(t3);
-    log.addTransaction(t4);
-    log.addTransaction(t5);
-    log.addTransaction(t6);
-    System.out.println(log);
   }
 
   /**

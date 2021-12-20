@@ -41,6 +41,11 @@ public abstract class Transaction implements Comparable<Transaction> {
     return transactionID;
   }
 
+  public BigDecimal getTotalCost() {
+    return this.price.multiply(this.quantity);
+  }
+
+
 
   /**
    * @param other transaction to compare this one to

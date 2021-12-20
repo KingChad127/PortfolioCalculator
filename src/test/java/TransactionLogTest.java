@@ -1,5 +1,3 @@
-package transactionsTest;
-
 import achadaga.stockportfolio.transactions.Buy;
 import achadaga.stockportfolio.transactions.Sell;
 import achadaga.stockportfolio.transactions.Transaction;
@@ -34,7 +32,6 @@ class TransactionLogTest {
 
   @Test
   void testAddTransaction() {
-
     int index = 0;
     for (Transaction t : log) {
       Assertions.assertEquals(t, sorted[index]);
