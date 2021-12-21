@@ -1,5 +1,7 @@
 package achadaga.stockportfolio.app;
 
+import achadaga.stockportfolio.portfolio.Portfolio;
+
 public class Menu {
 
   // Menu options
@@ -10,9 +12,10 @@ public class Menu {
 
   public static String userName;
 
-  public static void intro() {
+  public static Portfolio intro() {
     System.out.println("stockportfolio and tracker 1.0 - Abhinav Chadaga");
     userName = Service.username();
+    return new Portfolio(userName);
   }
 
   public static int displayMenuOptions(MenuHeader header) {
