@@ -1,6 +1,8 @@
 package achadaga.stockportfolio.app;
 
+import java.math.BigDecimal;
 import java.util.Scanner;
+import yahoofinance.YahooFinance;
 
 public class Service {
 
@@ -43,4 +45,68 @@ public class Service {
     return false;
   }
 
+  public static char enterTransaction() {
+    System.out.print("what type of transaction would you like to log? (BUY or SELL): ");
+    String type = usrInput.nextLine();
+    if (!type.equalsIgnoreCase("buy") && !type.equalsIgnoreCase("sell")) {
+      System.out.print("please enter BUY or SELL: ");
+      type = usrInput.nextLine();
+    }
+    String[] words = new String[2];
+    if (type.equalsIgnoreCase("buy")) {
+      words[0] = "purchase";
+      words[1] = "bought";
+    } else {
+      words[0] = "sale";
+      words[1] = "sold";
+    }
+    System.out.print("ticker symbol: ");
+    String inp = usrInput.nextLine();
+    while (!validTicker(inp)) {
+      System.out.println("there was an error in retrieving that ticker");
+      System.out.print("please try another: ");
+      inp = usrInput.nextLine();
+    }
+    inp = inp.toLowerCase();
+    System.out.print(words[0] + "price: $");
+    inp = usrInput.nextLine();
+    while (!validBD(inp)) {
+      System.out.print("please enter a valid " + words[0] + " price: ");
+      inp = usrInput.nextLine();
+    }
+    BigDecimal price = new BigDecimal(inp);
+    System.out.println("number of shares " + words[1] + ": ");
+    inp = usrInput.nextLine();
+    while (!validBD(inp)) {
+      System.out.print("please enter a valid number of shares " + words[1] + ": ");
+      inp = usrInput.nextLine();
+    }
+    BigDecimal quantity = new BigDecimal(inp);
+    System.out.print(words[0] + " date (YYYY-MM-DD): ");
+    inp = usrInput.nextLine();
+  }
+
+  private static boolean validTicker(String ticker) {
+    try {
+      YahooFinance.get(ticker);
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  private static boolean validBD(String price) {
+    try {
+      new BigDecimal(price);
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  private static boolean validDate(String date) {
+    Scanner sc = new Scanner(date);
+    String year = "";
+    sc.useDelimiter(",|-|/|\s");
+  }
 }

@@ -13,8 +13,6 @@ public class Menu {
   public static void intro() {
     System.out.println("stockportfolio and tracker 1.0 - Abhinav Chadaga");
     userName = Service.username();
-    // DEBUG!!!!
-    System.out.println("Success! User \"" + userName + "\" created");
   }
 
   public static int displayMenuOptions(MenuHeader header) {
