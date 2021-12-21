@@ -1,4 +1,4 @@
-package achadaga.stockportfolio.service;
+package achadaga.stockportfolio.app;
 
 public class Menu {
   // Menu options
@@ -9,8 +9,8 @@ public class Menu {
 
   public static void intro() {
     System.out.println("stockportfolio and tracker 1.0 - Abhinav Chadaga");
-    System.out.print("enter your name: ");
-    String user =
+    String user = Service.username();
+    // DEBUG!!!!
+    System.out.println("Success! User \"" + user + "\" created");
   }
-
 }
