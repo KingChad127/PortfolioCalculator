@@ -1,6 +1,9 @@
 package achadaga.stockportfolio.app;
 
+import static achadaga.stockportfolio.transactions.Transaction.WIDTH;
+
 import achadaga.stockportfolio.portfolio.Portfolio;
+import achadaga.stockportfolio.portfolio.Position;
 import achadaga.stockportfolio.transactions.TransactionLog;
 
 public class App {
@@ -11,8 +14,9 @@ public class App {
   }
 
   /**
-   * Introduce the program. Collect user name and create an empty portfolio with the user's
+   * Introduce the program. Collect user's name and create an empty portfolio with the user's
    * chosen name
+   *
    * @return an empty portfolio
    */
   public Portfolio intro() {
@@ -23,15 +27,16 @@ public class App {
 
   /**
    * Display the main menu options
+   *
    * @param header determines what header is printed depending on how many times the user has
    *               seen the menu
    * @return the user's menu choice
    */
   public int mainMenu(MenuHeader header) {
     if (header == MenuHeader.FIRST_TIME) {
-      System.out.println("\nWhat would you like to do today?");
+      System.out.println("What would you like to do today?");
     } else {
-      System.out.println("\nAnything else?");
+      System.out.println("Anything else?");
     }
     System.out.println("\t1. enter transactions");
     System.out.println("\t2. view transaction log");
@@ -42,10 +47,12 @@ public class App {
 
   /**
    * Display the transaction log menu after the user has viewed they're log
+   *
    * @return the user's menu choice
    */
   public int transactionLogMenu() {
-    System.out.println("\nOptions: ");
+    //System.out.println("-".repeat(WIDTH));
+    System.out.println("Options: ");
     System.out.println("\t1. search transactions by ticker");
     System.out.println("\t2. search transactions by date");
     System.out.println("\t3. list all BUY transactions");
@@ -57,10 +64,12 @@ public class App {
 
   /**
    * Display the portfolio menu after user has seen their portfolio
+   *
    * @return the user's menu choice
    */
   public int portfolioMenu() {
-    System.out.println("\nOptions: ");
+    //System.out.println("-".repeat(WIDTH));
+    System.out.println("Options: ");
     System.out.println("\t1. look up position");
     System.out.println("\t2. list winning positions");
     System.out.println("\t3. list losing positions");
@@ -85,34 +94,60 @@ public class App {
         }
       } else if (usrChoice == 2) {
         // view transaction history
-        System.out.println("\n" + transactionLog);
+        System.out.println(transactionLog);
+        System.out.println("-".repeat(WIDTH));
         // open transaction log sub menu
         int tmChoice = transactionLogMenu();
         while (tmChoice != 6) {
           if (tmChoice == 1) {
-            System.out.println("\n" + AppService.searchByTicker(transactionLog));
+            System.out.println(AppService.searchByTicker(transactionLog).printSubLog());
           } else if (tmChoice == 2) {
-            System.out.println("\n" + AppService.searchByDate(transactionLog));
+            System.out.println(AppService.searchByDate(transactionLog).printSubLog());
           } else if (tmChoice == 3) {
-            System.out.println("\n" + transactionLog.buys());
+            System.out.println("all BUY transactions");
+            System.out.println(transactionLog.buys().printSubLog());
+            System.out.println("-".repeat(WIDTH));
           } else if (tmChoice == 4) {
-            System.out.println("\n" + transactionLog.sells());
+            System.out.println("all SELL transactions");
+            System.out.println(transactionLog.sells().printSubLog());
+            System.out.println("-".repeat(WIDTH));
           } else if (tmChoice == 5) {
-            System.out.println("\n" + AppService.removeTransactions(transactionLog, usrPortfolio));
+            System.out.println(AppService.removeTransactions(transactionLog, usrPortfolio).printSubLog());
           }
           tmChoice = transactionLogMenu();
         }
       } else if (usrChoice == 3) {
         // print out the log
-        System.out.println("\n" + usrPortfolio);
+        System.out.println(usrPortfolio);
+        System.out.println("-".repeat(WIDTH));
         int pChoice = portfolioMenu();
         while (pChoice != 4) {
           if (pChoice == 1) {
-            System.out.println(AppService.lookUpPosition(usrPortfolio));
+            Position p = AppService.lookUpPosition(usrPortfolio);
+            if (p == null) {
+              System.out.println("no positions with that ticker were found\n");
+            } else {
+              System.out.println(p);
+            }
+            System.out.println("-".repeat(WIDTH));
           } else if (pChoice == 2) {
-            System.out.println(usrPortfolio.winningPositions());
+            Portfolio winning = usrPortfolio.winningPositions();
+            if (winning.size() == 0) {
+              System.out.println("there are 0 winning positions\n");
+            } else {
+              System.out.println("all winning positions: \n");
+              System.out.println(winning);
+            }
+            System.out.println("-".repeat(WIDTH));
           } else if (pChoice == 3) {
-            System.out.println(usrPortfolio.losingPositions());
+            Portfolio losing = usrPortfolio.losingPositions();
+            if (losing.size() == 0) {
+              System.out.println("there are 0 losing positions\n");
+            } else {
+              System.out.println("all losing positions: \n");
+              System.out.println(losing);
+            }
+            System.out.println("-".repeat(WIDTH));
           }
           pChoice = portfolioMenu();
         }

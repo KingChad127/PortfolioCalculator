@@ -156,6 +156,15 @@ public class TransactionLog implements Iterable<Transaction> {
     return output.toString();
   }
 
+  public String printSubLog() {
+    StringBuilder output = new StringBuilder();
+    for (Transaction t : log) {
+      output.append(t.toString());
+    }
+    output.append("\ntotal number of transactions: ").append(totalTransactions());
+    return output.toString();
+  }
+
   @Override
   public Iterator<Transaction> iterator() {
     return log.iterator();

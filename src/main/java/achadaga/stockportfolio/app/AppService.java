@@ -1,5 +1,7 @@
 package achadaga.stockportfolio.app;
 
+import static achadaga.stockportfolio.transactions.Transaction.WIDTH;
+
 import achadaga.stockportfolio.portfolio.Portfolio;
 import achadaga.stockportfolio.portfolio.Position;
 import achadaga.stockportfolio.transactions.Buy;
@@ -37,6 +39,7 @@ public class AppService {
       System.out.print("Y/n? ");
       confirmation = usrInput.nextLine().charAt(0);
     }
+    System.out.println("-".repeat(WIDTH));
     return user;
   }
 
@@ -52,6 +55,7 @@ public class AppService {
       System.out.print("please select a valid option 1 - " + menu.length + ": ");
       usrChoice = usrInput.nextLine().charAt(0);
     }
+    System.out.println("-".repeat(WIDTH));
     return usrChoice - '0';
   }
 
@@ -86,7 +90,7 @@ public class AppService {
 
     // collect transaction price
     prompt = words[0] + " price: $";
-    reprompt = "please enter a valid " + words[0] + " price: ";
+    reprompt = "please enter a valid " + words[0] + " price: $";
     BigDecimal price = collectBigDecimal(prompt, reprompt);
 
     // collect number of shares
@@ -116,7 +120,7 @@ public class AppService {
       System.out.print("(Y/n) ");
       inp = usrInput.nextLine().substring(0, 1);
     }
-
+    System.out.println("-".repeat(WIDTH));
     return inp.charAt(0) == 'y' || inp.charAt(0) == 'Y';
   }
 
@@ -230,7 +234,7 @@ public class AppService {
    * @return a valid ticker
    */
   private static String collectTicker(String prompt) {
-    System.out.println(prompt);
+    System.out.print(prompt);
     String ticker = usrInput.nextLine();
     while (invalidTicker(ticker)) {
       System.out.println("there was an error in retrieving that ticker");
@@ -248,11 +252,11 @@ public class AppService {
    * @return a valid LocalDate
    */
   private static LocalDate collectDate(String prompt, String reprompt) {
-    System.out.println(prompt);
+    System.out.print(prompt);
     String inp = usrInput.nextLine();
     String[] d = splitDate(inp);
     while (invalidDate(d)) {
-      System.out.println(reprompt);
+      System.out.print(reprompt);
       inp = usrInput.nextLine();
       d = splitDate(inp);
     }
@@ -268,7 +272,7 @@ public class AppService {
    * @return a valid BigDecimal
    */
   private static BigDecimal collectBigDecimal(String prompt, String reprompt) {
-    System.out.println(prompt);
+    System.out.print(prompt);
     String p = usrInput.nextLine();
     while (inValidDB(p)) {
       System.out.print(reprompt);
