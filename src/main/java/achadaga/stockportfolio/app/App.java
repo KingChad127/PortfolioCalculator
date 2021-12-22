@@ -74,4 +74,9 @@ public class App {
     }
     System.out.println("thank you for using stockportfolio and tracker");
   }
+
+  public static void main(String[] args) {
+    App stockportfolio = new App();
+    stockportfolio.run();
+  }
 }
