@@ -1,12 +1,14 @@
 package achadaga.stockportfolio.portfolio;
 
 import achadaga.stockportfolio.transactions.Transaction;
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class Portfolio implements Iterable<Position> {
 
+  // internal storage container
   private final Map<String, Position> positions;
   private final String user;
 
@@ -35,6 +37,22 @@ public class Portfolio implements Iterable<Position> {
     return positions.size();
   }
 
+  private BigDecimal totalRealized() {
+    BigDecimal total = new BigDecimal("0.0");
+    for (Position p : positions.values()) {
+      total = total.add(p.getTotalRealized());
+    }
+    return total;
+  }
+
+  private BigDecimal totalUnrealized() {
+    BigDecimal total = new BigDecimal("0.0");
+    for (Position p : positions.values()) {
+      total = total.add(p.getUnrealized());
+    }
+    return total;
+  }
+
   @Override
   public Iterator<Position> iterator() {
     return positions.values().iterator();
@@ -46,6 +64,8 @@ public class Portfolio implements Iterable<Position> {
     for (Position p : positions.values()) {
       output.append(p.toString()).append('\n');
     }
+    output.append("\ntotal realized gains/losses: ").append(totalRealized()).append("\n");
+    output.append("\ntotal unrealized gains/losses: ").append(totalRealized()).append("\n");
     return output.toString();
   }
 }

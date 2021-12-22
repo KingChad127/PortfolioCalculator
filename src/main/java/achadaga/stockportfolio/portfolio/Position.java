@@ -51,8 +51,12 @@ public class Position implements Comparable<Position> {
   /**
    * @return the unrealized gain of the current shares held.
    */
-  public BigDecimal getTotalUnrealized() {
+  public BigDecimal getUnrealized() {
     return currentPrice().subtract(avgCostPerShare).multiply(totalSharesHeld);
+  }
+
+  public BigDecimal getTotalRealized() {
+    return totalRealizedGain;
   }
 
   public String getTicker() {
@@ -67,9 +71,6 @@ public class Position implements Comparable<Position> {
     return avgCostPerShare;
   }
 
-  public BigDecimal getTotalRealized() {
-    return totalRealizedGain;
-  }
 
   public int totalTransactions() {
     return history.size();
@@ -98,7 +99,7 @@ public class Position implements Comparable<Position> {
   public String toString() {
     return ticker + "\n\tcurrent price: $" + currentPrice() + "\n\tshares held: " + totalSharesHeld
         + "\n\trealized gain: $" + totalRealizedGain + "\n\tunrealized gain: $"
-        + getTotalUnrealized() + "\n";
+        + getUnrealized() + "\n";
   }
 
   @Override

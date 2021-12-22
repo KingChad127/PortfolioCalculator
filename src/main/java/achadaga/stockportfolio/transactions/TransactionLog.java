@@ -2,11 +2,13 @@ package achadaga.stockportfolio.transactions;
 
 import java.time.LocalDate;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 public class TransactionLog implements Iterable<Transaction> {
-
+  // Internal Storage container
   private final Set<Transaction> log;
 
   /**
@@ -18,9 +20,10 @@ public class TransactionLog implements Iterable<Transaction> {
 
   /**
    * Construct a new transaction log from an existing TreeSet
+   *
    * @param ts TreeSet from which to construct a new transaction log
    */
-  public TransactionLog(TreeSet<Transaction> ts) {
+  public TransactionLog(Set<Transaction> ts) {
     log = new TreeSet<>(ts);
   }
 
@@ -33,7 +36,39 @@ public class TransactionLog implements Iterable<Transaction> {
     log.add(t);
   }
 
-  // TODO: remove transaction by ID
+  /**
+   * Remove multiple transactions by a list of ids
+   *
+   * @param ids of transactions to remove
+   * @return a list of the removed transactions
+   */
+  public TransactionLog removeTransactionsByID(List<UUID> ids) {
+    Set<Transaction> result = new TreeSet<>();
+    for (UUID id : ids) {
+      Transaction t;
+      t = removeTransactionByID(id);
+      if (t != null) {
+        result.add(t);
+      }
+    }
+    return new TransactionLog(result);
+  }
+
+  /**
+   * Remove a single transaction by id
+   *
+   * @param id id of transaction to remove
+   * @return the Transaction removed or null if no transactions exist with that id
+   */
+  private Transaction removeTransactionByID(UUID id) {
+    for (Transaction t : this) {
+      if (t.getTransactionID().equals(id)) {
+        log.remove(t);
+        return t;
+      }
+    }
+    return null;
+  }
 
   /**
    * @return the total number of transactions made by the user
@@ -48,7 +83,7 @@ public class TransactionLog implements Iterable<Transaction> {
    * @return a list of all Transactions that were made in this date range
    */
   public TransactionLog searchByDate(LocalDate start, LocalDate end) {
-    TreeSet<Transaction> results = new TreeSet<>();
+    Set<Transaction> results = new TreeSet<>();
     for (Transaction t : log) {
       if (t.getDate().compareTo(start) >= 0 && t.getDate().compareTo(end) <= 0) {
         results.add(t);
@@ -70,7 +105,7 @@ public class TransactionLog implements Iterable<Transaction> {
    * @return a list of all transactions of this stock
    */
   public TransactionLog searchByTicker(String ticker) {
-    TreeSet<Transaction> results = new TreeSet<>();
+    Set<Transaction> results = new TreeSet<>();
     for (Transaction t : log) {
       if (t.getTicker().equals(ticker)) {
         results.add(t);
@@ -83,7 +118,7 @@ public class TransactionLog implements Iterable<Transaction> {
    * @return a list of all buy transactions
    */
   public TransactionLog buys() {
-    TreeSet<Transaction> results = new TreeSet<>();
+    Set<Transaction> results = new TreeSet<>();
     for (Transaction t : log) {
       if (t instanceof Buy) {
         results.add(t);

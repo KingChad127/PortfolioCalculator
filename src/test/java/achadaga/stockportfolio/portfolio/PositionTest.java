@@ -36,7 +36,7 @@ class PositionTest {
 
   @Test
   void totalUnrealizedGain() {
-    BigDecimal unrealized = aapl.getTotalUnrealized();
+    BigDecimal unrealized = aapl.getUnrealized();
     Assertions.assertTrue(unrealized.doubleValue() >= 0.0);
   }
 

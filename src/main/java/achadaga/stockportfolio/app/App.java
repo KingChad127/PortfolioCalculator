@@ -1,9 +1,7 @@
 package achadaga.stockportfolio.app;
 
 import achadaga.stockportfolio.portfolio.Portfolio;
-import achadaga.stockportfolio.transactions.Transaction;
 import achadaga.stockportfolio.transactions.TransactionLog;
-import java.util.TreeSet;
 
 public class App {
 
@@ -15,9 +13,9 @@ public class App {
 
   public int mainMenu(MenuHeader header) {
     if (header == MenuHeader.FIRST_TIME) {
-      System.out.println("What would you like to do today?");
+      System.out.println("\nWhat would you like to do today?");
     } else {
-      System.out.println("Anything else?");
+      System.out.println("\nAnything else?");
     }
     System.out.println("\t1. enter transactions");
     System.out.println("\t2. view transaction log");
@@ -27,18 +25,14 @@ public class App {
   }
 
   public int transactionLogMenu() {
-    System.out.println("Options: ");
+    System.out.println("\nOptions: ");
     System.out.println("\t1. search transactions by ticker");
     System.out.println("\t2. search transactions by date");
     System.out.println("\t3. list all BUY transactions");
     System.out.println("\t4. list all SELL transactions");
-    System.out.println("\t5. return to main menu");
-    return AppService.menuChoice(new char[]{'1', '2', '3', '4', '5'});
-  }
-
-  public void searchTransactionsByDate() {
-    System.out.println("search transactions by date:");
-
+    System.out.println("\t5. remove existing transaction(s)");
+    System.out.println("\t6. return to main menu");
+    return AppService.menuChoice(new char[]{'1', '2', '3', '4', '5', '6'});
   }
 
   public void run() {
@@ -55,23 +49,26 @@ public class App {
         }
       } else if (usrChoice == 2) {
         // view transaction history
-        System.out.println(transactionLog);
+        System.out.println("\n" + transactionLog);
         // open transaction log sub menu
         int tmChoice = transactionLogMenu();
-        while (tmChoice != 5) {
+        while (tmChoice != 6) {
           if (tmChoice == 1) {
-            System.out.println(AppService.searchByTicker(transactionLog));
+            System.out.println("\n" + AppService.searchByTicker(transactionLog));
           } else if (tmChoice == 2) {
-            System.out.println(AppService.searchByDate(transactionLog));
+            System.out.println("\n" + AppService.searchByDate(transactionLog));
           } else if (tmChoice == 3) {
-            System.out.println(transactionLog.buys());
+            System.out.println("\n" + transactionLog.buys());
           } else if (tmChoice == 4) {
-            System.out.println(transactionLog.sells());
+            System.out.println("\n" + transactionLog.sells());
+          } else if (tmChoice == 5) {
+            System.out.println("\n" + AppService.removeTransactions(transactionLog));
           }
           tmChoice = transactionLogMenu();
         }
       } else if (usrChoice == 3) {
-        System.out.println(usrPortfolio);
+        // print out the log
+        System.out.println("\n" + usrPortfolio);
       }
       usrChoice = mainMenu(MenuHeader.OTHER);
     }
