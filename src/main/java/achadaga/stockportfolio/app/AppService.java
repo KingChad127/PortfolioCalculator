@@ -56,6 +56,159 @@ public class AppService {
   }
 
   /**
+   * Allow a user to enter a transaction
+   *
+   * @param transactionLog add this transaction to this log
+   * @param portfolio      add this transaction to this portfolio
+   * @return true if the user wants to keep adding transactions, false if the user is done
+   */
+  public static boolean enterTransaction(TransactionLog transactionLog, Portfolio portfolio) {
+    // collect type of transaction
+    System.out.print("what type of transaction would you like to log? (BUY or SELL): ");
+    String type = usrInput.nextLine();
+    while (!type.equalsIgnoreCase("buy") && !type.equalsIgnoreCase("sell")) {
+      System.out.print("please enter BUY or SELL: ");
+      type = usrInput.nextLine();
+    }
+    // used for print statements
+    String[] words = new String[2];
+    if (type.equalsIgnoreCase("buy")) {
+      words[0] = "purchase";
+      words[1] = "bought";
+    } else {
+      words[0] = "sale";
+      words[1] = "sold";
+    }
+    String prompt, reprompt;
+    // collect ticker symbol
+    prompt = "ticker symbol: ";
+    String ticker = collectTicker(prompt);
+
+    // collect transaction price
+    prompt = words[0] + " price: $";
+    reprompt = "please enter a valid " + words[0] + " price: ";
+    BigDecimal price = collectBigDecimal(prompt, reprompt);
+
+    // collect number of shares
+    prompt = "number of shares " + words[1] + ": ";
+    reprompt = "please enter a valid number of shares " + words[1] + ": ";
+    BigDecimal quantity = collectBigDecimal(prompt, reprompt);
+
+    // collect date of transactions
+    prompt = words[0] + " date (YYYY-MM-DD): ";
+    reprompt = "please enter a valid date (YYYY-MM-DD): ";
+    LocalDate date = collectDate(prompt, reprompt);
+
+    // we have the information needed to generate a transaction
+    // create a new transaction based on the user input
+    Transaction t;
+    t = type.equalsIgnoreCase("buy") ? new Buy(ticker, price, quantity, date)
+        : new Sell(ticker, price, quantity, date);
+
+    // add this transaction to both the transaction log and the user portfolio
+    transactionLog.addTransaction(t);
+    portfolio.addTransaction(t);
+
+    // confirm whether the user wants to add more transactions
+    System.out.print("add more? (Y/n) ");
+    String inp = usrInput.nextLine().substring(0, 1);
+    while (!inp.equalsIgnoreCase("y") && !inp.equalsIgnoreCase("n")) {
+      System.out.print("(Y/n) ");
+      inp = usrInput.nextLine().substring(0, 1);
+    }
+
+    return inp.charAt(0) == 'y' || inp.charAt(0) == 'Y';
+  }
+
+  /**
+   * Search the existing transaction log for transactions that fall on a specific date, or in a
+   * range of dates
+   *
+   * @param transactionLog look for valid transactions in this log
+   */
+  public static TransactionLog searchByDate(TransactionLog transactionLog) {
+    System.out.print("single date or range of dates (SINGLE or RANGE): ");
+    String inp = usrInput.nextLine();
+    while (!inp.equalsIgnoreCase("single") && !inp.equalsIgnoreCase("range")) {
+      System.out.print("please enter SINGLE or RANGE");
+      inp = usrInput.nextLine();
+    }
+    String prompt, reprompt;
+    if (inp.equalsIgnoreCase("range")) {
+      // collect start date
+      prompt = "enter the start date (YYYY-MM-DD): ";
+      reprompt = "please enter a valid date (YYYY-MM-DD): ";
+      LocalDate start = collectDate(prompt, reprompt);
+      // collect end date
+      prompt = "enter the end date (YYYY-MM-DD): ";
+      reprompt = "please enter a valid date (YYYY-MM-DD): ";
+      LocalDate end = collectDate(prompt, reprompt);
+
+      System.out.println("transactions that meet your criteria: ");
+      return transactionLog.searchByDate(start, end);
+    } else {
+      // collect single date
+      prompt = "enter date (YYYY-MM-DD): ";
+      reprompt = "please enter a valid date (YYYY-MM-DD): ";
+      LocalDate d = collectDate(prompt, reprompt);
+
+      System.out.println("transactions that meet your criteria: ");
+      return transactionLog.searchByDate(d);
+    }
+  }
+
+  /**
+   * Search the transaction by a specified ticker
+   *
+   * @param transactionLog the transaction log to search through
+   * @return a transaction log containing all transactions with the specified ticker
+   */
+  public static TransactionLog searchByTicker(TransactionLog transactionLog) {
+    String prompt = "enter ticker: ";
+    String ticker = collectTicker(prompt);
+    System.out.println("transactions that meet your criteria: ");
+    return transactionLog.searchByTicker(ticker);
+  }
+
+  /**
+   * Remove transactions from the log using UUID
+   *
+   * @param transactionLog the transaction log to remove from
+   * @return a TransactionLog of all the removed transactions
+   */
+  public static TransactionLog removeTransactions(TransactionLog transactionLog, Portfolio p) {
+    System.out.println("enter the id's of transactions to remove (separate by space): ");
+    String inp = usrInput.nextLine();
+    Scanner sc = new Scanner(inp);
+    List<String> ids = new ArrayList<>();
+    while (sc.hasNext()) {
+      ids.add(sc.next());
+    }
+    List<UUID> uuids = strToUUIDs(ids);
+    System.out.println("Here are the transactions that you removed: ");
+    return transactionLog.removeTransactionsByID(uuids, p);
+  }
+
+  /**
+   * Return the Position matching the user inputted ticker symbol
+   *
+   * @param p the Portfolio to look up from
+   * @return the matching Position
+   */
+  public static Position lookUpPosition(Portfolio p) {
+    String prompt = "enter ticker: ";
+    String ticker = collectTicker(prompt);
+    return p.findPosition(ticker);
+  }
+
+  /**
+   * Close the keyboard after the user is done with the program
+   */
+  public static void closeKeyboard() {
+    usrInput.close();
+  }
+
+  /**
    * Validate the user's menu choice
    *
    * @param menuChoices char array of all valid menu options
@@ -72,71 +225,56 @@ public class AppService {
   }
 
   /**
-   * Allow a user to enter a transaction
+   * Prompt the user, collect and verify a valid ticker symbol
    *
-   * @param transactionLog add this transaction to this log
-   * @param portfolio      add this transaction to this portfolio
-   * @return true if the user wants to keep adding transactions, false if the user is done
+   * @return a valid ticker
    */
-  public static boolean enterTransaction(TransactionLog transactionLog, Portfolio portfolio) {
-    System.out.print("what type of transaction would you like to log? (BUY or SELL): ");
-    String type = usrInput.nextLine();
-    while (!type.equalsIgnoreCase("buy") && !type.equalsIgnoreCase("sell")) {
-      System.out.print("please enter BUY or SELL: ");
-      type = usrInput.nextLine();
-    }
-    String[] words = new String[2];
-    if (type.equalsIgnoreCase("buy")) {
-      words[0] = "purchase";
-      words[1] = "bought";
-    } else {
-      words[0] = "sale";
-      words[1] = "sold";
-    }
-    System.out.print("ticker symbol: ");
+  private static String collectTicker(String prompt) {
+    System.out.println(prompt);
     String ticker = usrInput.nextLine();
     while (invalidTicker(ticker)) {
       System.out.println("there was an error in retrieving that ticker");
       System.out.print("please try another: ");
       ticker = usrInput.nextLine();
     }
-    ticker = ticker.toLowerCase();
-    System.out.print(words[0] + " price: $");
+    return ticker.toLowerCase();
+  }
+
+  /**
+   * Prompt the user, collect and verify a valid LocalDate value
+   *
+   * @param prompt   the first prompt the user sees
+   * @param reprompt a reprompt should the user enter an invalid value
+   * @return a valid LocalDate
+   */
+  private static LocalDate collectDate(String prompt, String reprompt) {
+    System.out.println(prompt);
+    String inp = usrInput.nextLine();
+    String[] d = splitDate(inp);
+    while (invalidDate(d)) {
+      System.out.println(reprompt);
+      inp = usrInput.nextLine();
+      d = splitDate(inp);
+    }
+    int[] date = strArrToIntArr(d);
+    return LocalDate.of(date[0], date[1], date[2]);
+  }
+
+  /**
+   * Prompt the user, collect and verify a valid BigDecimal value
+   *
+   * @param prompt   the first prompt the user sees
+   * @param reprompt the reprompt should the user enter an invalid value
+   * @return a valid BigDecimal
+   */
+  private static BigDecimal collectBigDecimal(String prompt, String reprompt) {
+    System.out.println(prompt);
     String p = usrInput.nextLine();
     while (inValidDB(p)) {
-      System.out.print("please enter a valid " + words[0] + " price: ");
+      System.out.print(reprompt);
       p = usrInput.nextLine();
     }
-    BigDecimal price = new BigDecimal(p);
-    System.out.print("number of shares " + words[1] + ": ");
-    String q = usrInput.nextLine();
-    while (inValidDB(q)) {
-      System.out.print("please enter a valid number of shares " + words[1] + ": ");
-      q = usrInput.nextLine();
-    }
-    BigDecimal quantity = new BigDecimal(q);
-    System.out.print(words[0] + " date (YYYY-MM-DD): ");
-    String d = usrInput.nextLine();
-    String[] dSplit = splitDate(d);
-    while (invalidDate(dSplit)) {
-      System.out.print("please enter a valid date (YYYY-MM-DD): ");
-      d = usrInput.nextLine();
-      dSplit = splitDate(d);
-    }
-    int[] dIntSplit = strArrToIntArr(dSplit);
-    LocalDate date = LocalDate.of(dIntSplit[0], dIntSplit[1], dIntSplit[2]);
-    Transaction t;
-    t = type.equalsIgnoreCase("buy") ? new Buy(ticker, price, quantity, date)
-        : new Sell(ticker, price, quantity, date);
-    transactionLog.addTransaction(t);
-    portfolio.addTransaction(t);
-    System.out.print("add more? (Y/n) ");
-    String inp = usrInput.nextLine().substring(0, 1);
-    while (!inp.equalsIgnoreCase("y") && !inp.equalsIgnoreCase("n")) {
-      System.out.print("(Y/n) ");
-      inp = usrInput.nextLine().substring(0, 1);
-    }
-    return inp.charAt(0) == 'y';
+    return new BigDecimal(p);
   }
 
   /**
@@ -177,7 +315,6 @@ public class AppService {
    */
   private static String[] splitDate(String date) {
     Scanner sc = new Scanner(date);
-    String year = "";
     sc.useDelimiter("[,|/|\\-|\\s]");
     String[] d = new String[3];
     int i = 0;
@@ -208,96 +345,6 @@ public class AppService {
     } catch (Exception e) {
       return true;
     }
-  }
-
-  /**
-   * Search the existing transaction log for transactions that fall on a specific date, or in a
-   * range of dates
-   *
-   * @param transactionLog look for valid transactions in this log
-   */
-  public static TransactionLog searchByDate(TransactionLog transactionLog) {
-    System.out.print("single date or range of dates (SINGLE or RANGE): ");
-    String inp = usrInput.nextLine();
-    while (!inp.equalsIgnoreCase("single") && !inp.equalsIgnoreCase("range")) {
-      System.out.print("please enter SINGLE or RANGE");
-      inp = usrInput.nextLine();
-    }
-    if (inp.equalsIgnoreCase("range")) {
-      System.out.print("enter the start date (YYYY-MM-DD): ");
-      String start = usrInput.nextLine();
-      String[] startSplit = splitDate(start);
-      while (invalidDate(startSplit)) {
-        System.out.print("please enter a valid date (YYYY-MM-DD): ");
-        start = usrInput.nextLine();
-        startSplit = splitDate(start);
-      }
-      int[] s = strArrToIntArr(startSplit);
-      System.out.print("enter the end date (YYYY-MM-DD): ");
-      String end = usrInput.nextLine();
-      String[] endSplit = splitDate(end);
-      while (invalidDate(endSplit)) {
-        System.out.print("please enter a valid date (YYYY-MM-DD): ");
-        end = usrInput.nextLine();
-        endSplit = splitDate(end);
-      }
-      int[] e = strArrToIntArr(endSplit);
-      return transactionLog.searchByDate(LocalDate.of(s[0], s[1], s[2]),
-          LocalDate.of(e[0], e[1], e[2]));
-    } else {
-      System.out.print("enter date (YYYY-MM-DD): ");
-      String date = usrInput.nextLine();
-      String[] dateSplit = splitDate(date);
-      while (invalidDate(dateSplit)) {
-        System.out.print("please enter a valid date (YYYY-MM-DD): ");
-        date = usrInput.nextLine();
-        dateSplit = splitDate(date);
-      }
-      int[] d = strArrToIntArr(dateSplit);
-      System.out.println("transactions that meet your criteria: ");
-      return transactionLog.searchByDate(LocalDate.of(d[0], d[1], d[2]));
-    }
-  }
-
-  public static TransactionLog searchByTicker(TransactionLog transactionLog) {
-    System.out.print("enter ticker: ");
-    String ticker = usrInput.nextLine();
-    while (invalidTicker(ticker)) {
-      System.out.println("there was an error in retrieving that ticker");
-      System.out.print("please try another: ");
-      ticker = usrInput.nextLine();
-    }
-    System.out.println("transactions that meet your criteria: ");
-    return transactionLog.searchByTicker(ticker);
-  }
-
-  /**
-   * Remove transactions from the log using UUID
-   *
-   * @param transactionLog the transaction log to remove from
-   * @return a TransactionLog of all the removed transactions
-   */
-  public static TransactionLog removeTransactions(TransactionLog transactionLog, Portfolio p) {
-    System.out.println("enter the id's of transactions to remove (separate by space): ");
-    String inp = usrInput.nextLine();
-    Scanner sc = new Scanner(inp);
-    List<String> ids = new ArrayList<>();
-    while (sc.hasNext()) {
-      ids.add(sc.next());
-    }
-    List<UUID> uuids = strToUUIDs(ids);
-    System.out.println("Here are the transactions that you removed: ");
-    return transactionLog.removeTransactionsByID(uuids, p);
-  }
-
-  public static Position lookUpPostion(Portfolio p) {
-    String ticker = usrInput.nextLine();
-    while (invalidTicker(ticker)) {
-      System.out.println("there was an error in retrieving that ticker");
-      System.out.print("please try another: ");
-      ticker = usrInput.nextLine();
-    }
-    return p.findPosition(ticker);
   }
 
   /**

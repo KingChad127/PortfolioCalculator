@@ -10,12 +10,23 @@ public class App {
     stockportfolio.run();
   }
 
+  /**
+   * Introduce the program. Collect user name and create an empty portfolio with the user's
+   * chosen name
+   * @return an empty portfolio
+   */
   public Portfolio intro() {
     System.out.println("stockportfolio and tracker 1.0 - Abhinav Chadaga");
     String userName = AppService.username();
     return new Portfolio(userName);
   }
 
+  /**
+   * Display the main menu options
+   * @param header determines what header is printed depending on how many times the user has
+   *               seen the menu
+   * @return the user's menu choice
+   */
   public int mainMenu(MenuHeader header) {
     if (header == MenuHeader.FIRST_TIME) {
       System.out.println("\nWhat would you like to do today?");
@@ -29,6 +40,10 @@ public class App {
     return AppService.menuChoice(new char[]{'1', '2', '3', '4'});
   }
 
+  /**
+   * Display the transaction log menu after the user has viewed they're log
+   * @return the user's menu choice
+   */
   public int transactionLogMenu() {
     System.out.println("\nOptions: ");
     System.out.println("\t1. search transactions by ticker");
@@ -40,6 +55,10 @@ public class App {
     return AppService.menuChoice(new char[]{'1', '2', '3', '4', '5', '6'});
   }
 
+  /**
+   * Display the portfolio menu after user has seen their portfolio
+   * @return the user's menu choice
+   */
   public int portfolioMenu() {
     System.out.println("\nOptions: ");
     System.out.println("\t1. look up position");
@@ -49,6 +68,9 @@ public class App {
     return AppService.menuChoice(new char[]{'1', '2', '3', '4'});
   }
 
+  /**
+   * Driver for the app. Controls main app/menu logic and runs the appropriate the AppServices
+   */
   public void run() {
     Portfolio usrPortfolio = intro();
     TransactionLog transactionLog = new TransactionLog();
@@ -86,7 +108,7 @@ public class App {
         int pChoice = portfolioMenu();
         while (pChoice != 4) {
           if (pChoice == 1) {
-            System.out.println(AppService.lookUpPostion(usrPortfolio));
+            System.out.println(AppService.lookUpPosition(usrPortfolio));
           } else if (pChoice == 2) {
             System.out.println(usrPortfolio.winningPositions());
           } else if (pChoice == 3) {
@@ -98,6 +120,7 @@ public class App {
       }
       usrChoice = mainMenu(MenuHeader.OTHER);
     }
+    AppService.closeKeyboard();
     System.out.println("thank you for using stockportfolio and tracker");
   }
 }
