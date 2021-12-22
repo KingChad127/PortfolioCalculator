@@ -40,6 +40,15 @@ public class App {
     return AppService.menuChoice(new char[]{'1', '2', '3', '4', '5', '6'});
   }
 
+  public int portfolioMenu() {
+    System.out.println("\nOptions: ");
+    System.out.println("\t1. look up position");
+    System.out.println("\t2. list winning positions");
+    System.out.println("\t3. list losing positions");
+    System.out.println("\t4. return to main menu");
+    return AppService.menuChoice(new char[]{'1', '2', '3', '4'});
+  }
+
   public void run() {
     Portfolio usrPortfolio = intro();
     TransactionLog transactionLog = new TransactionLog();
@@ -74,6 +83,18 @@ public class App {
       } else if (usrChoice == 3) {
         // print out the log
         System.out.println("\n" + usrPortfolio);
+        int pChoice = portfolioMenu();
+        while (pChoice != 4) {
+          if (pChoice == 1) {
+            System.out.println(AppService.lookUpPostion(usrPortfolio));
+          } else if (pChoice == 2) {
+            System.out.println(usrPortfolio.winningPositions());
+          } else if (pChoice == 3) {
+            System.out.println(usrPortfolio.losingPositions());
+          }
+          pChoice = portfolioMenu();
+        }
+
       }
       usrChoice = mainMenu(MenuHeader.OTHER);
     }

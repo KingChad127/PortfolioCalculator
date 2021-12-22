@@ -4,7 +4,10 @@ import achadaga.stockportfolio.transactions.Transaction;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
+import javax.sound.sampled.Port;
 
 public class Portfolio implements Iterable<Position> {
 
@@ -13,8 +16,13 @@ public class Portfolio implements Iterable<Position> {
   private final String user;
 
   public Portfolio(String user) {
-    this.user = user;
     this.portfolio = new TreeMap<>();
+    this.user = user;
+  }
+
+  public Portfolio(Map<String, Position> map) {
+    this.portfolio = new TreeMap<>(map);
+    this.user = "";
   }
 
   /**
@@ -44,7 +52,7 @@ public class Portfolio implements Iterable<Position> {
   private BigDecimal totalRealized() {
     BigDecimal total = new BigDecimal("0.0");
     for (Position p : portfolio.values()) {
-      total = total.add(p.getTotalRealized());
+      total = total.add(p.getRealized());
     }
     return total;
   }
@@ -57,6 +65,28 @@ public class Portfolio implements Iterable<Position> {
     return total;
   }
 
+  public Portfolio winningPositions() {
+    Map<String, Position> result = new TreeMap<>();
+    for (Position p : this) {
+      BigDecimal r = p.getRealized().add(p.getUnrealized());
+      if (r.signum() >= 0) {
+        result.put(p.getTicker(), p);
+      }
+    }
+    return new Portfolio(result);
+  }
+
+  public Portfolio losingPositions() {
+    Map<String, Position> result = new TreeMap<>();
+    for (Position p : this) {
+      BigDecimal r = p.getRealized().add(p.getUnrealized());
+      if (r.signum() < 0) {
+        result.put(p.getTicker(), p);
+      }
+    }
+    return new Portfolio(result);
+  }
+
   @Override
   public Iterator<Position> iterator() {
     return portfolio.values().iterator();
@@ -64,7 +94,8 @@ public class Portfolio implements Iterable<Position> {
 
   @Override
   public String toString() {
-    StringBuilder output = new StringBuilder(user + "'s Portfolio\n\n");
+    StringBuilder output = user.equals("")? new StringBuilder() : new StringBuilder(user + "'s "
+        + "Portfolio\n\n");
     for (Position p : portfolio.values()) {
       output.append(p.toString()).append('\n');
     }

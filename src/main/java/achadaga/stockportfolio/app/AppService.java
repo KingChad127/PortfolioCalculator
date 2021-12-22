@@ -1,6 +1,7 @@
 package achadaga.stockportfolio.app;
 
 import achadaga.stockportfolio.portfolio.Portfolio;
+import achadaga.stockportfolio.portfolio.Position;
 import achadaga.stockportfolio.transactions.Buy;
 import achadaga.stockportfolio.transactions.Sell;
 import achadaga.stockportfolio.transactions.Transaction;
@@ -287,6 +288,16 @@ public class AppService {
     List<UUID> uuids = strToUUIDs(ids);
     System.out.println("Here are the transactions that you removed: ");
     return transactionLog.removeTransactionsByID(uuids, p);
+  }
+
+  public static Position lookUpPostion(Portfolio p) {
+    String ticker = usrInput.nextLine();
+    while (invalidTicker(ticker)) {
+      System.out.println("there was an error in retrieving that ticker");
+      System.out.print("please try another: ");
+      ticker = usrInput.nextLine();
+    }
+    return p.findPosition(ticker);
   }
 
   /**

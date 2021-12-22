@@ -31,7 +31,7 @@ class PositionTest {
 
   @Test
   void totalRealizedGain() {
-    Assertions.assertEquals(new BigDecimal("5250.00"), aapl.getTotalRealized());
+    Assertions.assertEquals(new BigDecimal("5250.00"), aapl.getRealized());
   }
 
   @Test

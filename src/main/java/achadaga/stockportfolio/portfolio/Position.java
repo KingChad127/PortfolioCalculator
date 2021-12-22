@@ -59,7 +59,7 @@ public class Position implements Comparable<Position> {
     return currentPrice().subtract(avgCostPerShare).multiply(totalSharesHeld);
   }
 
-  public BigDecimal getTotalRealized() {
+  public BigDecimal getRealized() {
     return totalRealizedGain;
   }
 
