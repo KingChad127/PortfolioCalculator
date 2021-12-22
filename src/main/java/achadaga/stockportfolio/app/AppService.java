@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
+import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
-import yahoofinance.quotes.stock.StockQuote;
 
 public class AppService {
 
@@ -146,8 +146,8 @@ public class AppService {
    */
   private static boolean invalidTicker(String ticker) {
     try {
-      StockQuote stock = YahooFinance.get(ticker).getQuote();
-      return false;
+      Stock stock = YahooFinance.get(ticker);
+      return !stock.isValid();
     } catch (Exception e) {
       return true;
     }
@@ -177,10 +177,10 @@ public class AppService {
   private static String[] splitDate(String date) {
     Scanner sc = new Scanner(date);
     String year = "";
-    sc.useDelimiter(",|-|/|\s");
+    sc.useDelimiter("[,|/|\\-|\\s]");
     String[] d = new String[3];
     int i = 0;
-    while (sc.hasNext()) {
+    while (sc.hasNext() && i < 3) {
       d[i] = sc.next();
       i++;
     }
@@ -199,7 +199,10 @@ public class AppService {
     }
     try {
       int[] d = strArrToIntArr(date);
-      LocalDate.of(d[0], d[1], d[2]);
+      LocalDate localDate = LocalDate.of(d[0], d[1], d[2]);
+      if (localDate.isAfter(LocalDate.now())) {
+        return false;
+      }
       return false;
     } catch (Exception e) {
       return true;

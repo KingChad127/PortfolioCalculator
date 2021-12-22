@@ -68,8 +68,8 @@ public class Portfolio implements Iterable<Position> {
     for (Position p : portfolio.values()) {
       output.append(p.toString()).append('\n');
     }
-    output.append("\ntotal realized gains/losses: ").append(totalRealized()).append("\n");
-    output.append("\ntotal unrealized gains/losses: ").append(totalUnrealized()).append("\n");
+    output.append("\ntotal realized gains/losses: $").append(totalRealized()).append("\n");
+    output.append("\ntotal unrealized gains/losses: $").append(totalUnrealized()).append("\n");
     return output.toString();
   }
 }
