@@ -5,6 +5,11 @@ import achadaga.stockportfolio.transactions.TransactionLog;
 
 public class App {
 
+  public static void main(String[] args) {
+    App stockportfolio = new App();
+    stockportfolio.run();
+  }
+
   public Portfolio intro() {
     System.out.println("stockportfolio and tracker 1.0 - Abhinav Chadaga");
     String userName = AppService.username();
@@ -62,7 +67,7 @@ public class App {
           } else if (tmChoice == 4) {
             System.out.println("\n" + transactionLog.sells());
           } else if (tmChoice == 5) {
-            System.out.println("\n" + AppService.removeTransactions(transactionLog));
+            System.out.println("\n" + AppService.removeTransactions(transactionLog, usrPortfolio));
           }
           tmChoice = transactionLogMenu();
         }
@@ -73,10 +78,5 @@ public class App {
       usrChoice = mainMenu(MenuHeader.OTHER);
     }
     System.out.println("thank you for using stockportfolio and tracker");
-  }
-
-  public static void main(String[] args) {
-    App stockportfolio = new App();
-    stockportfolio.run();
   }
 }

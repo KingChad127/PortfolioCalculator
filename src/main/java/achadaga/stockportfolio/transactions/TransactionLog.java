@@ -1,5 +1,7 @@
 package achadaga.stockportfolio.transactions;
 
+import achadaga.stockportfolio.portfolio.Portfolio;
+import achadaga.stockportfolio.portfolio.Position;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
@@ -42,11 +44,11 @@ public class TransactionLog implements Iterable<Transaction> {
    * @param ids of transactions to remove
    * @return a list of the removed transactions
    */
-  public TransactionLog removeTransactionsByID(List<UUID> ids) {
+  public TransactionLog removeTransactionsByID(List<UUID> ids, Portfolio p) {
     Set<Transaction> result = new TreeSet<>();
     for (UUID id : ids) {
       Transaction t;
-      t = removeTransactionByID(id);
+      t = removeTransactionByID(id, p);
       if (t != null) {
         result.add(t);
       }
@@ -60,10 +62,14 @@ public class TransactionLog implements Iterable<Transaction> {
    * @param id id of transaction to remove
    * @return the Transaction removed or null if no transactions exist with that id
    */
-  private Transaction removeTransactionByID(UUID id) {
+  private Transaction removeTransactionByID(UUID id, Portfolio p) {
     for (Transaction t : this) {
       if (t.getTransactionID().equals(id)) {
         log.remove(t);
+        Position pos = p.findPosition(t.getTicker());
+        if (pos != null) {
+          pos.removeTransaction(t);
+        }
         return t;
       }
     }

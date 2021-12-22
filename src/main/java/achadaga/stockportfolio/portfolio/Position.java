@@ -48,6 +48,10 @@ public class Position implements Comparable<Position> {
     }
   }
 
+  public void removeTransaction(Transaction t) {
+    history.remove(t);
+  }
+
   /**
    * @return the unrealized gain of the current shares held.
    */

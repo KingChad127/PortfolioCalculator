@@ -273,7 +273,7 @@ public class AppService {
    * @param transactionLog the transaction log to remove from
    * @return a TransactionLog of all the removed transactions
    */
-  public static TransactionLog removeTransactions(TransactionLog transactionLog) {
+  public static TransactionLog removeTransactions(TransactionLog transactionLog, Portfolio p) {
     System.out.println("enter the id's of transactions to remove (separate by space): ");
     String inp = usrInput.nextLine();
     Scanner sc = new Scanner(inp);
@@ -283,7 +283,7 @@ public class AppService {
     }
     List<UUID> uuids = strToUUIDs(ids);
     System.out.println("Here are the transactions that you removed: ");
-    return transactionLog.removeTransactionsByID(uuids);
+    return transactionLog.removeTransactionsByID(uuids, p);
   }
 
   /**

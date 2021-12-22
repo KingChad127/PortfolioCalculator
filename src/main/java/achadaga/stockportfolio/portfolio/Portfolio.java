@@ -9,12 +9,12 @@ import java.util.TreeMap;
 public class Portfolio implements Iterable<Position> {
 
   // internal storage container
-  private final Map<String, Position> positions;
+  private final Map<String, Position> portfolio;
   private final String user;
 
   public Portfolio(String user) {
     this.user = user;
-    this.positions = new TreeMap<>();
+    this.portfolio = new TreeMap<>();
   }
 
   /**
@@ -24,22 +24,26 @@ public class Portfolio implements Iterable<Position> {
    * @param t the transaction to add
    */
   public void addTransaction(Transaction t) {
-    if (!positions.containsKey(t.getTicker())) {
-      positions.put(t.getTicker(), new Position(t.getTicker()));
+    if (!portfolio.containsKey(t.getTicker())) {
+      portfolio.put(t.getTicker(), new Position(t.getTicker()));
     }
-    positions.get(t.getTicker()).addTransaction(t);
+    portfolio.get(t.getTicker()).addTransaction(t);
   }
 
   /**
    * @return the number of positions the user holds
    */
   public int size() {
-    return positions.size();
+    return portfolio.size();
+  }
+
+  public Position findPosition(String ticker) {
+    return portfolio.get(ticker);
   }
 
   private BigDecimal totalRealized() {
     BigDecimal total = new BigDecimal("0.0");
-    for (Position p : positions.values()) {
+    for (Position p : portfolio.values()) {
       total = total.add(p.getTotalRealized());
     }
     return total;
@@ -47,7 +51,7 @@ public class Portfolio implements Iterable<Position> {
 
   private BigDecimal totalUnrealized() {
     BigDecimal total = new BigDecimal("0.0");
-    for (Position p : positions.values()) {
+    for (Position p : portfolio.values()) {
       total = total.add(p.getUnrealized());
     }
     return total;
@@ -55,17 +59,17 @@ public class Portfolio implements Iterable<Position> {
 
   @Override
   public Iterator<Position> iterator() {
-    return positions.values().iterator();
+    return portfolio.values().iterator();
   }
 
   @Override
   public String toString() {
     StringBuilder output = new StringBuilder(user + "'s Portfolio\n\n");
-    for (Position p : positions.values()) {
+    for (Position p : portfolio.values()) {
       output.append(p.toString()).append('\n');
     }
     output.append("\ntotal realized gains/losses: ").append(totalRealized()).append("\n");
-    output.append("\ntotal unrealized gains/losses: ").append(totalRealized()).append("\n");
+    output.append("\ntotal unrealized gains/losses: ").append(totalUnrealized()).append("\n");
     return output.toString();
   }
 }
