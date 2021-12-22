@@ -9,8 +9,19 @@ public class TransactionLog implements Iterable<Transaction> {
 
   private final Set<Transaction> log;
 
+  /**
+   * Construct an empty transactionLog
+   */
   public TransactionLog() {
     log = new TreeSet<>();
+  }
+
+  /**
+   * Construct a new transaction log from an existing TreeSet
+   * @param ts TreeSet from which to construct a new transaction log
+   */
+  public TransactionLog(TreeSet<Transaction> ts) {
+    log = new TreeSet<>(ts);
   }
 
   /**
@@ -21,6 +32,8 @@ public class TransactionLog implements Iterable<Transaction> {
   public void addTransaction(Transaction t) {
     log.add(t);
   }
+
+  // TODO: remove transaction by ID
 
   /**
    * @return the total number of transactions made by the user
@@ -34,21 +47,21 @@ public class TransactionLog implements Iterable<Transaction> {
    * @param end   the ending date
    * @return a list of all Transactions that were made in this date range
    */
-  public TreeSet<Transaction> searchByDate(LocalDate start, LocalDate end) {
+  public TransactionLog searchByDate(LocalDate start, LocalDate end) {
     TreeSet<Transaction> results = new TreeSet<>();
     for (Transaction t : log) {
       if (t.getDate().compareTo(start) >= 0 && t.getDate().compareTo(end) <= 0) {
         results.add(t);
       }
     }
-    return results;
+    return new TransactionLog(results);
   }
 
   /**
    * @param tgt single date to list all transactions for
    * @return a treeSet of all Transactions that were made in this date range
    */
-  public TreeSet<Transaction> searchByDate(LocalDate tgt) {
+  public TransactionLog searchByDate(LocalDate tgt) {
     return searchByDate(tgt, tgt);
   }
 
@@ -56,40 +69,40 @@ public class TransactionLog implements Iterable<Transaction> {
    * @param ticker the target ticker to list all transactions for
    * @return a list of all transactions of this stock
    */
-  public TreeSet<Transaction> searchByTicker(String ticker) {
+  public TransactionLog searchByTicker(String ticker) {
     TreeSet<Transaction> results = new TreeSet<>();
     for (Transaction t : log) {
       if (t.getTicker().equals(ticker)) {
         results.add(t);
       }
     }
-    return results;
+    return new TransactionLog(results);
   }
 
   /**
    * @return a list of all buy transactions
    */
-  public TreeSet<Transaction> buys() {
+  public TransactionLog buys() {
     TreeSet<Transaction> results = new TreeSet<>();
     for (Transaction t : log) {
       if (t instanceof Buy) {
         results.add(t);
       }
     }
-    return results;
+    return new TransactionLog(results);
   }
 
   /**
    * @return a list of all sale transactions
    */
-  public TreeSet<Transaction> sells() {
+  public TransactionLog sells() {
     TreeSet<Transaction> results = new TreeSet<>();
     for (Transaction t : log) {
       if (t instanceof Sell) {
         results.add(t);
       }
     }
-    return results;
+    return new TransactionLog(results);
   }
 
   @Override
@@ -98,6 +111,7 @@ public class TransactionLog implements Iterable<Transaction> {
     for (Transaction t : log) {
       output.append(t.toString());
     }
+    output.append("\ntotal number of transactions: ").append(totalTransactions());
     return output.toString();
   }
 
