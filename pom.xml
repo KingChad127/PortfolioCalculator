@@ -7,6 +7,7 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <archive>
@@ -20,13 +21,14 @@
         </configuration>
         <executions>
           <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
             <goals>
               <goal>single</goal>
             </goals>
-            <id>make-assembly</id>
-            <phase>package</phase>
           </execution>
         </executions>
+        <version>3.3.0</version>
       </plugin>
     </plugins>
   </build>

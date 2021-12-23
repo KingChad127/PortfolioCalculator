@@ -75,7 +75,6 @@ public class Position implements Comparable<Position> {
     return avgCostPerShare;
   }
 
-
   public int totalTransactions() {
     return history.size();
   }
@@ -101,9 +100,9 @@ public class Position implements Comparable<Position> {
 
   @Override
   public String toString() {
-    return ticker + "\n\tcurrent price: $" + currentPrice() + "\n\tshares held: " + totalSharesHeld
-        + "\n\trealized gain: $" + totalRealizedGain + "\n\tunrealized gain: $"
-        + getUnrealized() + "\n";
+    return ticker + "\n\taverage cost per share: $" + avgCostPerShare + "\n\tcurrent price: $"
+        + currentPrice() + "\n\tshares held: " + totalSharesHeld + "\n\trealized gain: $"
+        + totalRealizedGain + "\n\tunrealized gain: $" + getUnrealized() + "\n";
   }
 
   @Override
