@@ -6,7 +6,6 @@ import java.util.UUID;
 
 public abstract class Transaction implements Comparable<Transaction> {
 
-  public static final int WIDTH = 40;
   private final String ticker;
   private final BigDecimal price;
   private final BigDecimal quantity; // support fractional shares as well

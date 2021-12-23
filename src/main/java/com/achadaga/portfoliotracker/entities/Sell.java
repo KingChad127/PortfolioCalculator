@@ -1,5 +1,6 @@
 package com.achadaga.portfoliotracker.entities;
 
+import com.achadaga.portfoliotracker.app.Constants;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -14,7 +15,8 @@ public class Sell extends Transaction {
   public String toString() {
     BigDecimal roundedPrice = getPrice().setScale(2, RoundingMode.HALF_UP);
     return super.toString() + "\n\tSELL " + getTicker() + "\n\tsale price: $" + String.format(
-        "%.2f", roundedPrice) + "\n\tshares " + "sold: " + getQuantity() + "\n" + "-".repeat(WIDTH);
+        "%.2f", roundedPrice) + "\n\tshares " + "sold: " + getQuantity() + "\n" + "-".repeat(
+        Constants.WIDTH);
   }
 }
 

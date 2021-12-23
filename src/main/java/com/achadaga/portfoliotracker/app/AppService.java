@@ -37,7 +37,7 @@ public class AppService {
       System.out.print("Y/n? ");
       confirmation = usrInput.nextLine().charAt(0);
     }
-    System.out.println("-".repeat(Transaction.WIDTH));
+    System.out.println("-".repeat(Constants.WIDTH));
     return user;
   }
 
@@ -53,7 +53,7 @@ public class AppService {
       System.out.print("please select a valid option 1 - " + menu.length + ": ");
       usrChoice = usrInput.nextLine().charAt(0);
     }
-    System.out.println("-".repeat(Transaction.WIDTH));
+    System.out.println("-".repeat(Constants.WIDTH));
     return usrChoice - '0';
   }
 
@@ -118,7 +118,7 @@ public class AppService {
       System.out.print("(Y/n) ");
       inp = usrInput.nextLine().substring(0, 1);
     }
-    System.out.println("-".repeat(Transaction.WIDTH));
+    System.out.println("-".repeat(Constants.WIDTH));
     return inp.charAt(0) == 'y' || inp.charAt(0) == 'Y';
   }
 

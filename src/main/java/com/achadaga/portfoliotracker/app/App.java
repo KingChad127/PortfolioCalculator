@@ -1,6 +1,6 @@
 package com.achadaga.portfoliotracker.app;
 
-import static com.achadaga.portfoliotracker.entities.Transaction.WIDTH;
+import static com.achadaga.portfoliotracker.app.Constants.WIDTH;
 
 import com.achadaga.portfoliotracker.app.Constants.MenuHeader;
 import com.achadaga.portfoliotracker.entities.Portfolio;
