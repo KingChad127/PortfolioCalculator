@@ -1,5 +1,7 @@
 package com.achadaga.portfoliotracker.app;
 
+import static com.achadaga.portfoliotracker.app.Constants.WIDTH;
+
 import com.achadaga.portfoliotracker.entities.Portfolio;
 import com.achadaga.portfoliotracker.entities.Position;
 import com.achadaga.portfoliotracker.entities.Buy;
@@ -9,6 +11,7 @@ import com.achadaga.portfoliotracker.entities.TransactionLog;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
@@ -37,7 +40,7 @@ public class AppService {
       System.out.print("Y/n? ");
       confirmation = usrInput.nextLine().charAt(0);
     }
-    System.out.println("-".repeat(Constants.WIDTH));
+    System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
     return user;
   }
 
@@ -53,7 +56,7 @@ public class AppService {
       System.out.print("please select a valid option 1 - " + menu.length + ": ");
       usrChoice = usrInput.nextLine().charAt(0);
     }
-    System.out.println("-".repeat(Constants.WIDTH));
+    System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
     return usrChoice - '0';
   }
 
@@ -118,7 +121,7 @@ public class AppService {
       System.out.print("(Y/n) ");
       inp = usrInput.nextLine().substring(0, 1);
     }
-    System.out.println("-".repeat(Constants.WIDTH));
+    System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
     return inp.charAt(0) == 'y' || inp.charAt(0) == 'Y';
   }
 

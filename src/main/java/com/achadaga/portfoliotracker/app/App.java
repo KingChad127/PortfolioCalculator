@@ -6,6 +6,7 @@ import com.achadaga.portfoliotracker.app.Constants.MenuHeader;
 import com.achadaga.portfoliotracker.entities.Portfolio;
 import com.achadaga.portfoliotracker.entities.Position;
 import com.achadaga.portfoliotracker.entities.TransactionLog;
+import java.util.Collections;
 
 public class App {
 
@@ -96,7 +97,7 @@ public class App {
       } else if (usrChoice == 2) {
         // view transaction history
         System.out.println(transactionLog);
-        System.out.println("-".repeat(WIDTH));
+        System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
         // open transaction log sub menu
         int tmChoice = transactionLogMenu();
         while (tmChoice != 6) {
@@ -107,11 +108,11 @@ public class App {
           } else if (tmChoice == 3) {
             System.out.println("all BUY transactions");
             System.out.println(transactionLog.buys().printSubLog());
-            System.out.println("-".repeat(WIDTH));
+            System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
           } else if (tmChoice == 4) {
             System.out.println("all SELL transactions");
             System.out.println(transactionLog.sells().printSubLog());
-            System.out.println("-".repeat(WIDTH));
+            System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
           } else if (tmChoice == 5) {
             System.out.println(AppService.removeTransactions(transactionLog, usrPortfolio).printSubLog());
           }
@@ -120,7 +121,7 @@ public class App {
       } else if (usrChoice == 3) {
         // print out the log
         System.out.println(usrPortfolio);
-        System.out.println("-".repeat(WIDTH));
+        System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
         int pChoice = portfolioMenu();
         while (pChoice != 4) {
           if (pChoice == 1) {
@@ -130,7 +131,7 @@ public class App {
             } else {
               System.out.println(p);
             }
-            System.out.println("-".repeat(WIDTH));
+            System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
           } else if (pChoice == 2) {
             Portfolio winning = usrPortfolio.winningPositions();
             if (winning.size() == 0) {
@@ -139,7 +140,7 @@ public class App {
               System.out.println("all winning positions: \n");
               System.out.println(winning);
             }
-            System.out.println("-".repeat(WIDTH));
+            System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
           } else if (pChoice == 3) {
             Portfolio losing = usrPortfolio.losingPositions();
             if (losing.size() == 0) {
@@ -148,7 +149,7 @@ public class App {
               System.out.println("all losing positions: \n");
               System.out.println(losing);
             }
-            System.out.println("-".repeat(WIDTH));
+            System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
           }
           pChoice = portfolioMenu();
         }
