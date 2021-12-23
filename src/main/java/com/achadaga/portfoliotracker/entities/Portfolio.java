@@ -11,11 +11,21 @@ public class Portfolio implements Iterable<Position> {
   private final Map<String, Position> portfolio;
   private final String user;
 
+  /**
+   * Construct an empty portfolio
+   *
+   * @param user the name of the owner of the portfolio
+   */
   public Portfolio(String user) {
     this.portfolio = new TreeMap<>();
     this.user = user;
   }
 
+  /**
+   * Construct a portfolio with no owner from an existing map
+   *
+   * @param map the map from which to build this portfolio
+   */
   public Portfolio(Map<String, Position> map) {
     this.portfolio = new TreeMap<>(map);
     this.user = "";
@@ -45,6 +55,9 @@ public class Portfolio implements Iterable<Position> {
     return portfolio.get(ticker);
   }
 
+  /**
+   * @return the total realized gains from this portfolio
+   */
   private BigDecimal totalRealized() {
     BigDecimal total = new BigDecimal("0.0");
     for (Position p : portfolio.values()) {
@@ -53,6 +66,9 @@ public class Portfolio implements Iterable<Position> {
     return total;
   }
 
+  /**
+   * @return the total unrealized gains from this portfolio
+   */
   private BigDecimal totalUnrealized() {
     BigDecimal total = new BigDecimal("0.0");
     for (Position p : portfolio.values()) {
@@ -61,6 +77,9 @@ public class Portfolio implements Iterable<Position> {
     return total;
   }
 
+  /**
+   * @return a sub portfolio of all the positions that are currently making >= $0 for the user
+   */
   public Portfolio winningPositions() {
     Map<String, Position> result = new TreeMap<>();
     for (Position p : this) {
@@ -72,6 +91,9 @@ public class Portfolio implements Iterable<Position> {
     return new Portfolio(result);
   }
 
+  /**
+   * @return a sub portfolio of all the positions that are currently making < $0 for the user.
+   */
   public Portfolio losingPositions() {
     Map<String, Position> result = new TreeMap<>();
     for (Position p : this) {
@@ -90,8 +112,8 @@ public class Portfolio implements Iterable<Position> {
 
   @Override
   public String toString() {
-    StringBuilder output = user.equals("")? new StringBuilder() : new StringBuilder(user + "'s "
-        + "Portfolio\n\n");
+    StringBuilder output =
+        user.equals("") ? new StringBuilder() : new StringBuilder(user + "'s " + "Portfolio\n\n");
     for (Position p : portfolio.values()) {
       output.append(p.toString()).append('\n');
     }

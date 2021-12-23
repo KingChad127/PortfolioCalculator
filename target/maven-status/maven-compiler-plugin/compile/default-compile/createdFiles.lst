@@ -1,10 +1,10 @@
 com/achadaga/portfoliotracker/app/App.class
-com/achadaga/portfoliotracker/entities/Portfolio.class
 com/achadaga/portfoliotracker/entities/Sell.class
+com/achadaga/portfoliotracker/entities/Portfolio.class
 com/achadaga/portfoliotracker/entities/Position.class
 com/achadaga/portfoliotracker/app/Constants$MenuHeader.class
-com/achadaga/portfoliotracker/entities/Transaction.class
 com/achadaga/portfoliotracker/entities/TransactionLog.class
+com/achadaga/portfoliotracker/entities/Transaction.class
 com/achadaga/portfoliotracker/entities/Buy.class
 com/achadaga/portfoliotracker/app/Constants.class
 com/achadaga/portfoliotracker/app/AppService.class

@@ -23,7 +23,7 @@ class PositionTest {
 
   @Test
   void addTransaction() {
-    Assertions.assertEquals(4, aapl.totalTransactions());
+    Assertions.assertEquals(4, aapl.size());
   }
 
   @Test

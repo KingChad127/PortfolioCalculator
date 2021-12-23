@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public abstract class Transaction implements Comparable<Transaction> {
-
+  // data
   private final String ticker;
   private final BigDecimal price;
   private final BigDecimal quantity; // support fractional shares as well
@@ -49,7 +49,7 @@ public abstract class Transaction implements Comparable<Transaction> {
   /**
    * @param other transaction to compare this one to
    * @return a positive number if this transaction is older than other, 0 if this transaction
-   * occurred on the same date, and negative otherwise
+   * occurred on the same date, and negative otherwise. Break ties by going to the UUIDs
    */
   @Override
   public int compareTo(Transaction other) {

@@ -6,7 +6,10 @@ import com.achadaga.portfoliotracker.app.Constants.MenuHeader;
 import com.achadaga.portfoliotracker.entities.Portfolio;
 import com.achadaga.portfoliotracker.entities.Position;
 import com.achadaga.portfoliotracker.entities.TransactionLog;
+import java.io.File;
 import java.util.Collections;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileSystemView;
 
 public class App {
 
@@ -52,8 +55,7 @@ public class App {
    *
    * @return the user's menu choice
    */
-  public int transactionLogMenu() {
-    //System.out.println("-".repeat(WIDTH));
+  public int transactionLogPostMenu() {
     System.out.println("Options: ");
     System.out.println("\t1. search transactions by ticker");
     System.out.println("\t2. search transactions by date");
@@ -63,6 +65,21 @@ public class App {
     System.out.println("\t6. return to main menu");
     return AppService.menuChoice(new char[]{'1', '2', '3', '4', '5', '6'});
   }
+
+  /**
+   * Display the transaction log menu after the user has viewed they're log
+   *
+   * @return the user's menu choice
+   */
+  public int transactionLogPreMenu() {
+    System.out.println("Options: ");
+    System.out.println("\t1. select a valid transaction input file");
+    System.out.println("\t2. enter transactions manually");
+    System.out.println("\t3. back");
+    return AppService.menuChoice(new char[]{'1', '2', '3'});
+  }
+
+
 
   /**
    * Display the portfolio menu after user has seen their portfolio
@@ -89,17 +106,27 @@ public class App {
     while (usrChoice != 4) {
       // enter transactions
       if (usrChoice == 1) {
-        boolean cont = AppService.enterTransaction(transactionLog, usrPortfolio);
-        // keep entering transactions until the user signals he or she is done
-        while (cont) {
-          cont = AppService.enterTransaction(transactionLog, usrPortfolio);
+        int tPreChoice = transactionLogPreMenu();
+        if (tPreChoice != 3) {
+          if (tPreChoice == 1) {
+            // load input file
+            FileChooser fileChooser = new FileChooser();
+            File file = fileChooser.openFile();
+          } else {
+            // tPreChoice == 2
+            boolean cont = AppService.enterTransaction(transactionLog, usrPortfolio);
+            // keep entering transactions until the user signals he or she is done
+            while (cont) {
+              cont = AppService.enterTransaction(transactionLog, usrPortfolio);
+            }
+          }
         }
       } else if (usrChoice == 2) {
         // view transaction history
         System.out.println(transactionLog);
         System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
         // open transaction log sub menu
-        int tmChoice = transactionLogMenu();
+        int tmChoice = transactionLogPostMenu();
         while (tmChoice != 6) {
           if (tmChoice == 1) {
             System.out.println(AppService.searchByTicker(transactionLog).printSubLog());
@@ -116,7 +143,7 @@ public class App {
           } else if (tmChoice == 5) {
             System.out.println(AppService.removeTransactions(transactionLog, usrPortfolio).printSubLog());
           }
-          tmChoice = transactionLogMenu();
+          tmChoice = transactionLogPostMenu();
         }
       } else if (usrChoice == 3) {
         // print out the log

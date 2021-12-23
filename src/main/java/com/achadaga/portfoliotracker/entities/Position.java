@@ -44,34 +44,70 @@ public class Position implements Comparable<Position> {
     }
   }
 
+  /**
+   * Remove a single transaction from this position
+   * @param t the transaction to remove
+   */
   public void removeTransaction(Transaction t) {
     history.remove(t);
+    // recalculate
+    if (t instanceof Buy) {
+      totalCostOfPurchasedShares = totalCostOfPurchasedShares.subtract(
+          t.getPrice().multiply(t.getQuantity()));
+      totalSharesHeld = totalSharesHeld.subtract(t.getQuantity());
+      avgCostPerShare = totalCostOfPurchasedShares.divide(totalSharesHeld, RoundingMode.HALF_UP);
+    } else if (t instanceof Sell) {
+      totalSharesHeld = totalSharesHeld.add(t.getQuantity());
+      BigDecimal diff = t.getPrice().subtract(avgCostPerShare);
+      totalRealizedGain = totalRealizedGain.subtract(diff.multiply(t.getQuantity()));
+    }
   }
 
   /**
-   * @return the unrealized gain of the current shares held.
+   * @return the unrealized gain for this position. the unrealized gain is the money that could
+   * be made from selling the current shares held.
    */
   public BigDecimal getUnrealized() {
     return currentPrice().subtract(avgCostPerShare).multiply(totalSharesHeld);
   }
 
+  /**
+   * @return the realized gain for this position. The realized gain is the actual money made from
+   * selling shares of this position
+   */
   public BigDecimal getRealized() {
     return totalRealizedGain;
   }
 
+  /**
+   *
+   * @return the ticker for this position
+   */
   public String getTicker() {
     return ticker;
   }
 
+  /**
+   *
+   * @return the total number of shares currently held
+   */
   public BigDecimal getTotalSharesHeld() {
     return totalSharesHeld;
   }
 
+  /**
+   *
+   * @return the average purchase cost per share
+   */
   public BigDecimal getAvgCostPerShare() {
     return avgCostPerShare;
   }
 
-  public int totalTransactions() {
+  /**
+   *
+   * @return the total number of transactions
+   */
+  public int size() {
     return history.size();
   }
 

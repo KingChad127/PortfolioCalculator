@@ -8,6 +8,7 @@ import com.achadaga.portfoliotracker.entities.Buy;
 import com.achadaga.portfoliotracker.entities.Sell;
 import com.achadaga.portfoliotracker.entities.Transaction;
 import com.achadaga.portfoliotracker.entities.TransactionLog;
+import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -58,6 +59,29 @@ public class AppService {
     }
     System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
     return usrChoice - '0';
+  }
+
+  public static void enterTransactionByFile(TransactionLog transactionLog, Portfolio portfolio) {
+    File f = collectFile();
+    if (f == null) {
+      System.out.println("No transactions were added");
+    } else {
+      // add contents of the file
+    }
+  }
+
+  public static File collectFile() {
+    FileChooser fileChooser = new FileChooser();
+    boolean cont = true;
+    File file = fileChooser.openFile();
+    while (file == null && cont) {
+      System.out.print("Would you like to try again? (Y/n) ");
+      char input = usrInput.nextLine().charAt(0);
+      if (input == 'n' || input == 'N') {
+        cont = false;
+      }
+    }
+    return file;
   }
 
   /**
