@@ -68,9 +68,10 @@ public abstract class Transaction implements Comparable<Transaction> {
 
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof Transaction other)) {
+    if (!(obj instanceof Transaction)) {
       return false;
     }
+    Transaction other = (Transaction) obj;
     return this.getTransactionID().equals(other.getTransactionID());
   }
 }
