@@ -1,0 +1,5 @@
+transactiontype,ticker,price,quantity,date
+buy,AAPL,135.0999,2,2021.06.28
+buy,AAPL,143.9699,1,2021.07.07
+sell,AAPL,161.99,3,2021.11.22
+buy,AAPL,159.8191,3,2021.11.23

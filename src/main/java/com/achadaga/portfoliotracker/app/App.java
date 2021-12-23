@@ -8,8 +8,6 @@ import com.achadaga.portfoliotracker.entities.Position;
 import com.achadaga.portfoliotracker.entities.TransactionLog;
 import java.io.File;
 import java.util.Collections;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileSystemView;
 
 public class App {
 
@@ -79,8 +77,6 @@ public class App {
     return AppService.menuChoice(new char[]{'1', '2', '3'});
   }
 
-
-
   /**
    * Display the portfolio menu after user has seen their portfolio
    *
@@ -109,9 +105,8 @@ public class App {
         int tPreChoice = transactionLogPreMenu();
         if (tPreChoice != 3) {
           if (tPreChoice == 1) {
-            // load input file
-            FileChooser fileChooser = new FileChooser();
-            File file = fileChooser.openFile();
+            // add transactions from CSV file
+            AppService.enterTransactionByFile(transactionLog, usrPortfolio);
           } else {
             // tPreChoice == 2
             boolean cont = AppService.enterTransaction(transactionLog, usrPortfolio);
@@ -141,7 +136,8 @@ public class App {
             System.out.println(transactionLog.sells().printSubLog());
             System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
           } else if (tmChoice == 5) {
-            System.out.println(AppService.removeTransactions(transactionLog, usrPortfolio).printSubLog());
+            System.out.println(
+                AppService.removeTransactions(transactionLog, usrPortfolio).printSubLog());
           }
           tmChoice = transactionLogPostMenu();
         }

@@ -39,8 +39,11 @@ public class Position implements Comparable<Position> {
       avgCostPerShare = totalCostOfPurchasedShares.divide(totalSharesHeld, RoundingMode.HALF_UP);
     } else if (t instanceof Sell) {
       totalSharesHeld = totalSharesHeld.subtract(t.getQuantity());
+      totalCostOfPurchasedShares =
+          totalCostOfPurchasedShares.subtract(t.getQuantity().multiply(t.getPrice()));
       BigDecimal diff = t.getPrice().subtract(avgCostPerShare);
       totalRealizedGain = totalRealizedGain.add(diff.multiply(t.getQuantity()));
+
     }
   }
 

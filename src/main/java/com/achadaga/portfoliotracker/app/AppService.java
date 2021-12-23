@@ -2,13 +2,16 @@ package com.achadaga.portfoliotracker.app;
 
 import static com.achadaga.portfoliotracker.app.Constants.WIDTH;
 
+import com.achadaga.portfoliotracker.entities.Buy;
 import com.achadaga.portfoliotracker.entities.Portfolio;
 import com.achadaga.portfoliotracker.entities.Position;
-import com.achadaga.portfoliotracker.entities.Buy;
 import com.achadaga.portfoliotracker.entities.Sell;
 import com.achadaga.portfoliotracker.entities.Transaction;
 import com.achadaga.portfoliotracker.entities.TransactionLog;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import java.io.File;
+import java.io.FileReader;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -61,19 +64,50 @@ public class AppService {
     return usrChoice - '0';
   }
 
+  /**
+   * Allow a user to enter a correctly formatted CSV file to enter all transactions at once.
+   *
+   * @param transactionLog to add to
+   * @param portfolio      to add to
+   */
   public static void enterTransactionByFile(TransactionLog transactionLog, Portfolio portfolio) {
     File f = collectFile();
     if (f == null) {
       System.out.println("No transactions were added");
     } else {
-      // add contents of the file
+      // try to add contents of file
+      try {
+        FileReader fileReader = new FileReader(f);
+        CSVReader csvReader = new CSVReaderBuilder(fileReader).withSkipLines(1).build();
+        String[] line;
+        while ((line = csvReader.readNext()) != null) {
+          String ticker = line[1];
+          BigDecimal price = new BigDecimal(line[2]);
+          BigDecimal quantity = new BigDecimal(line[3]);
+          int[] d = strArrToIntArr(splitDate(line[4]));
+          LocalDate date = LocalDate.of(d[0], d[1], d[2]);
+          if (!line[0].equalsIgnoreCase("buy") && !line[0].equalsIgnoreCase("sell")) {
+            System.out.println("Invalid File");
+            return;
+          }
+          Transaction t = line[0].equalsIgnoreCase("buy") ? new Buy(ticker, price, quantity, date)
+              : new Sell(ticker, price, quantity, date);
+          transactionLog.addTransaction(t);
+          portfolio.addTransaction(t);
+        }
+      } catch (Exception e) {
+        System.out.println("There was an error in reading the file");
+      }
     }
   }
 
-  public static File collectFile() {
-    FileChooser fileChooser = new FileChooser();
+  /**
+   * @return a user selected file. If null, the user cancelled the operation
+   */
+  private static File collectFile() {
+    CSVFileChooser CSVFileChooser = new CSVFileChooser();
     boolean cont = true;
-    File file = fileChooser.openFile();
+    File file = CSVFileChooser.openFile();
     while (file == null && cont) {
       System.out.print("Would you like to try again? (Y/n) ");
       char input = usrInput.nextLine().charAt(0);
@@ -266,7 +300,7 @@ public class AppService {
       System.out.print("please try another: ");
       ticker = usrInput.nextLine();
     }
-    return ticker.toLowerCase();
+    return ticker.toUpperCase();
   }
 
   /**
@@ -344,7 +378,7 @@ public class AppService {
    */
   private static String[] splitDate(String date) {
     Scanner sc = new Scanner(date);
-    sc.useDelimiter("[,|/|\\-|\\s]");
+    sc.useDelimiter("[,|/|\\-|\\s|.]");
     String[] d = new String[3];
     int i = 0;
     while (sc.hasNext() && i < 3) {
