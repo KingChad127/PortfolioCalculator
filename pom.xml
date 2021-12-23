@@ -12,7 +12,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>achadaga.stockportfolio.app.App</mainClass>
+              <mainClass>com.achadaga.stockportfolio.app.App</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>

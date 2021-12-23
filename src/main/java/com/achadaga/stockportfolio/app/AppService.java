@@ -1,13 +1,11 @@
-package achadaga.stockportfolio.app;
+package com.achadaga.stockportfolio.app;
 
-import static achadaga.stockportfolio.transactions.Transaction.WIDTH;
-
-import achadaga.stockportfolio.portfolio.Portfolio;
-import achadaga.stockportfolio.portfolio.Position;
-import achadaga.stockportfolio.transactions.Buy;
-import achadaga.stockportfolio.transactions.Sell;
-import achadaga.stockportfolio.transactions.Transaction;
-import achadaga.stockportfolio.transactions.TransactionLog;
+import com.achadaga.stockportfolio.portfolio.Portfolio;
+import com.achadaga.stockportfolio.portfolio.Position;
+import com.achadaga.stockportfolio.transactions.Buy;
+import com.achadaga.stockportfolio.transactions.Sell;
+import com.achadaga.stockportfolio.transactions.Transaction;
+import com.achadaga.stockportfolio.transactions.TransactionLog;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,7 +37,7 @@ public class AppService {
       System.out.print("Y/n? ");
       confirmation = usrInput.nextLine().charAt(0);
     }
-    System.out.println("-".repeat(WIDTH));
+    System.out.println("-".repeat(Transaction.WIDTH));
     return user;
   }
 
@@ -55,7 +53,7 @@ public class AppService {
       System.out.print("please select a valid option 1 - " + menu.length + ": ");
       usrChoice = usrInput.nextLine().charAt(0);
     }
-    System.out.println("-".repeat(WIDTH));
+    System.out.println("-".repeat(Transaction.WIDTH));
     return usrChoice - '0';
   }
 
@@ -120,7 +118,7 @@ public class AppService {
       System.out.print("(Y/n) ");
       inp = usrInput.nextLine().substring(0, 1);
     }
-    System.out.println("-".repeat(WIDTH));
+    System.out.println("-".repeat(Transaction.WIDTH));
     return inp.charAt(0) == 'y' || inp.charAt(0) == 'Y';
   }
 

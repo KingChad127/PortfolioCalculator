@@ -1,13 +1,10 @@
-package achadaga.stockportfolio.portfolio;
+package com.achadaga.stockportfolio.portfolio;
 
-import achadaga.stockportfolio.transactions.Transaction;
+import com.achadaga.stockportfolio.transactions.Transaction;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
-import javax.sound.sampled.Port;
 
 public class Portfolio implements Iterable<Position> {
 

@@ -1,10 +1,10 @@
-package achadaga.stockportfolio.app;
+package com.achadaga.stockportfolio.app;
 
-import static achadaga.stockportfolio.transactions.Transaction.WIDTH;
+import static com.achadaga.stockportfolio.transactions.Transaction.WIDTH;
 
-import achadaga.stockportfolio.portfolio.Portfolio;
-import achadaga.stockportfolio.portfolio.Position;
-import achadaga.stockportfolio.transactions.TransactionLog;
+import com.achadaga.stockportfolio.portfolio.Portfolio;
+import com.achadaga.stockportfolio.portfolio.Position;
+import com.achadaga.stockportfolio.transactions.TransactionLog;
 
 public class App {
 

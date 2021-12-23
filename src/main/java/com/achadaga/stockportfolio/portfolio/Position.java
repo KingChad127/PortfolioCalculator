@@ -1,8 +1,8 @@
-package achadaga.stockportfolio.portfolio;
+package com.achadaga.stockportfolio.portfolio;
 
-import achadaga.stockportfolio.transactions.Buy;
-import achadaga.stockportfolio.transactions.Sell;
-import achadaga.stockportfolio.transactions.Transaction;
+import com.achadaga.stockportfolio.transactions.Buy;
+import com.achadaga.stockportfolio.transactions.Sell;
+import com.achadaga.stockportfolio.transactions.Transaction;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;

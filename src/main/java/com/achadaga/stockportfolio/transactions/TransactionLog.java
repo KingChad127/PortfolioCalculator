@@ -1,7 +1,7 @@
-package achadaga.stockportfolio.transactions;
+package com.achadaga.stockportfolio.transactions;
 
-import achadaga.stockportfolio.portfolio.Portfolio;
-import achadaga.stockportfolio.portfolio.Position;
+import com.achadaga.stockportfolio.portfolio.Portfolio;
+import com.achadaga.stockportfolio.portfolio.Position;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;

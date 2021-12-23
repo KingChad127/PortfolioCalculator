@@ -1,4 +1,4 @@
-package achadaga.stockportfolio.transactions;
+package com.achadaga.stockportfolio.transactions;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
