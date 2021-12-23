@@ -1,4 +1,4 @@
-package com.achadaga.stockportfolio.transactions;
+package com.achadaga.portfoliotracker.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -65,5 +65,13 @@ public abstract class Transaction implements Comparable<Transaction> {
   @Override
   public String toString() {
     return "\n" + getDate().toString() + "\n\ttransaction ID: " + transactionID;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Transaction other)) {
+      return false;
+    }
+    return this.getTransactionID().equals(other.getTransactionID());
   }
 }

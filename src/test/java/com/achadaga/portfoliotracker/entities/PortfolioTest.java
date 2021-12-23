@@ -1,8 +1,5 @@
-package com.achadaga.stockportfolio.portfolio;
+package com.achadaga.portfoliotracker.entities;
 
-import com.achadaga.stockportfolio.transactions.Buy;
-import com.achadaga.stockportfolio.transactions.Sell;
-import com.achadaga.stockportfolio.transactions.Transaction;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;

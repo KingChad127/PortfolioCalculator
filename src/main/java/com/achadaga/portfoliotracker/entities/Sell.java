@@ -1,4 +1,4 @@
-package com.achadaga.stockportfolio.transactions;
+package com.achadaga.portfoliotracker.entities;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

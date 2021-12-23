@@ -1,7 +1,5 @@
-package com.achadaga.stockportfolio.transactions;
+package com.achadaga.portfoliotracker.entities;
 
-import com.achadaga.stockportfolio.portfolio.Portfolio;
-import com.achadaga.stockportfolio.portfolio.Position;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +8,7 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 public class TransactionLog implements Iterable<Transaction> {
+
   // Internal Storage container
   private final Set<Transaction> log;
 
@@ -79,7 +78,7 @@ public class TransactionLog implements Iterable<Transaction> {
   /**
    * @return the total number of transactions made by the user
    */
-  public int totalTransactions() {
+  public int size() {
     return log.size();
   }
 
@@ -152,7 +151,7 @@ public class TransactionLog implements Iterable<Transaction> {
     for (Transaction t : log) {
       output.append(t.toString());
     }
-    output.append("\ntotal number of transactions: ").append(totalTransactions());
+    output.append("\ntotal number of transactions: ").append(size());
     return output.toString();
   }
 
@@ -161,12 +160,34 @@ public class TransactionLog implements Iterable<Transaction> {
     for (Transaction t : log) {
       output.append(t.toString());
     }
-    output.append("\ntotal number of transactions: ").append(totalTransactions());
+    output.append("\ntotal number of transactions: ").append(size());
     return output.toString();
   }
 
   @Override
   public Iterator<Transaction> iterator() {
     return log.iterator();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    // check obj class
+    if (obj.getClass() != this.getClass()) {
+      return false;
+    }
+    TransactionLog other = (TransactionLog) obj;
+    // check size
+    if (this.size() != other.size()) {
+      return false;
+    }
+    // check each entry
+    Iterator<Transaction> thisIt = this.iterator();
+    Iterator<Transaction> otherIt = other.iterator();
+    while (thisIt.hasNext() && otherIt.hasNext()) {
+      if (!thisIt.next().equals(otherIt.next())) {
+        return false;
+      }
+    }
+    return true;
   }
 }

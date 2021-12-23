@@ -1,11 +1,11 @@
-package com.achadaga.stockportfolio.app;
+package com.achadaga.portfoliotracker.app;
 
-import com.achadaga.stockportfolio.portfolio.Portfolio;
-import com.achadaga.stockportfolio.portfolio.Position;
-import com.achadaga.stockportfolio.transactions.Buy;
-import com.achadaga.stockportfolio.transactions.Sell;
-import com.achadaga.stockportfolio.transactions.Transaction;
-import com.achadaga.stockportfolio.transactions.TransactionLog;
+import com.achadaga.portfoliotracker.entities.Portfolio;
+import com.achadaga.portfoliotracker.entities.Position;
+import com.achadaga.portfoliotracker.entities.Buy;
+import com.achadaga.portfoliotracker.entities.Sell;
+import com.achadaga.portfoliotracker.entities.Transaction;
+import com.achadaga.portfoliotracker.entities.TransactionLog;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;

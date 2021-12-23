@@ -1,4 +1,4 @@
-package com.achadaga.stockportfolio.transactions;
+package com.achadaga.portfoliotracker.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -38,29 +38,33 @@ class TransactionLogTest {
 
   @Test
   void testTotalTransactions() {
-    Assertions.assertEquals(6, log.totalTransactions());
+    Assertions.assertEquals(6, log.size());
   }
 
   @Test
   void testSearchByDate() {
-    Assertions.assertEquals(new TreeSet<>(Arrays.asList(transactions[4], transactions[5])),
+    Assertions.assertEquals(new TransactionLog(new TreeSet<>(Arrays.asList(transactions[4],
+            transactions[5]))),
         log.searchByDate(LocalDate.of(2021, 7, 12)));
   }
 
   @Test
   void testSearchByTicker() {
-    Assertions.assertEquals(new TreeSet<>(Arrays.asList(transactions[2], transactions[0])),
+    Assertions.assertEquals(new TransactionLog(new TreeSet<>(Arrays.asList(transactions[2],
+            transactions[0]))),
         log.searchByTicker("AEHR"));
-    Assertions.assertEquals(new TreeSet<>(Arrays.asList(transactions[4], transactions[1])),
+    Assertions.assertEquals(new TransactionLog(new TreeSet<>(Arrays.asList(transactions[4],
+            transactions[1]))),
         log.searchByTicker("NVDA"));
   }
 
   @Test
   void testTotalBuysAndSells() {
-    Assertions.assertEquals(new TreeSet<>(
-            Arrays.asList(transactions[3], transactions[5], transactions[1], transactions[0])),
+    Assertions.assertEquals(new TransactionLog(new TreeSet<>(
+            Arrays.asList(transactions[3], transactions[5], transactions[1], transactions[0]))),
         log.buys());
-    Assertions.assertEquals(new TreeSet<>(Arrays.asList(transactions[4], transactions[2])),
+    Assertions.assertEquals(new TransactionLog(new TreeSet<>(Arrays.asList(transactions[4],
+            transactions[2]))),
         log.sells());
   }
 

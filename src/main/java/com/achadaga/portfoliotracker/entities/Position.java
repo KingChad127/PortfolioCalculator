@@ -1,12 +1,8 @@
-package com.achadaga.stockportfolio.portfolio;
+package com.achadaga.portfoliotracker.entities;
 
-import com.achadaga.stockportfolio.transactions.Buy;
-import com.achadaga.stockportfolio.transactions.Sell;
-import com.achadaga.stockportfolio.transactions.Transaction;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import yahoofinance.YahooFinance;
@@ -113,12 +109,7 @@ public class Position implements Comparable<Position> {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Position position = (Position) o;
-    return ticker.equals(position.ticker);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(ticker);
+    Position other = (Position) o;
+    return this.history.equals(other.history);
   }
 }

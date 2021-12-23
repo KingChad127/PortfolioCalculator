@@ -1,10 +1,11 @@
-package com.achadaga.stockportfolio.app;
+package com.achadaga.portfoliotracker.app;
 
-import static com.achadaga.stockportfolio.transactions.Transaction.WIDTH;
+import static com.achadaga.portfoliotracker.entities.Transaction.WIDTH;
 
-import com.achadaga.stockportfolio.portfolio.Portfolio;
-import com.achadaga.stockportfolio.portfolio.Position;
-import com.achadaga.stockportfolio.transactions.TransactionLog;
+import com.achadaga.portfoliotracker.app.Constants.MenuHeader;
+import com.achadaga.portfoliotracker.entities.Portfolio;
+import com.achadaga.portfoliotracker.entities.Position;
+import com.achadaga.portfoliotracker.entities.TransactionLog;
 
 public class App {
 
@@ -20,7 +21,7 @@ public class App {
    * @return an empty portfolio
    */
   public Portfolio intro() {
-    System.out.println("stockportfolio and tracker pre-release v0.1.0 - Abhinav Chadaga");
+    System.out.println("PortfolioTracker pre-release v0.1.0 - Abhinav Chadaga");
     String userName = AppService.username();
     return new Portfolio(userName);
   }
@@ -156,6 +157,6 @@ public class App {
       usrChoice = mainMenu(MenuHeader.OTHER);
     }
     AppService.closeKeyboard();
-    System.out.println("thank you for using stockportfolio and tracker");
+    System.out.println("thank you for using portfoliotracker and tracker");
   }
 }
