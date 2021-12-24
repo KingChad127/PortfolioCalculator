@@ -22,7 +22,7 @@ public class App {
    * @return an empty portfolio
    */
   public Portfolio intro() {
-    System.out.println("PortfolioTracker pre-release v0.1.0 - Abhinav Chadaga");
+    System.out.println("PortfolioTracker pre-release v0.2.0 - Abhinav Chadaga");
     String userName = AppService.username();
     return new Portfolio(userName);
   }
