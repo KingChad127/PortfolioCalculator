@@ -13,6 +13,7 @@ public class Position implements Comparable<Position> {
   private final Set<Transaction> history; // contains all transactions of this ticker
   private BigDecimal totalCostOfPurchasedShares;
   private BigDecimal totalSharesHeld;
+  private BigDecimal totalSharesBought;
   private BigDecimal avgCostPerShare;
   private BigDecimal totalRealizedGain;
 
@@ -23,6 +24,7 @@ public class Position implements Comparable<Position> {
     this.totalSharesHeld = new BigDecimal("0.0");
     this.avgCostPerShare = new BigDecimal("0.0");
     this.totalRealizedGain = new BigDecimal("0.0");
+    this.totalSharesBought = new BigDecimal("0.0");
   }
 
   /**
@@ -36,11 +38,12 @@ public class Position implements Comparable<Position> {
       totalCostOfPurchasedShares = totalCostOfPurchasedShares.add(
           t.getPrice().multiply(t.getQuantity()));
       totalSharesHeld = totalSharesHeld.add(t.getQuantity());
-      avgCostPerShare = totalCostOfPurchasedShares.divide(totalSharesHeld, RoundingMode.HALF_UP);
+      totalSharesBought = totalSharesBought.add(t.getQuantity());
+      avgCostPerShare = totalCostOfPurchasedShares.divide(totalSharesBought, RoundingMode.HALF_UP);
     } else if (t instanceof Sell) {
       totalSharesHeld = totalSharesHeld.subtract(t.getQuantity());
-      totalCostOfPurchasedShares =
-          totalCostOfPurchasedShares.subtract(t.getQuantity().multiply(t.getPrice()));
+//      totalCostOfPurchasedShares =
+//          totalCostOfPurchasedShares.subtract(t.getQuantity().multiply(t.getPrice()));
       BigDecimal diff = t.getPrice().subtract(avgCostPerShare);
       totalRealizedGain = totalRealizedGain.add(diff.multiply(t.getQuantity()));
 
