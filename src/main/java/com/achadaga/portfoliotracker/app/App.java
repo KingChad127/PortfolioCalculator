@@ -6,7 +6,6 @@ import com.achadaga.portfoliotracker.app.Constants.MenuHeader;
 import com.achadaga.portfoliotracker.entities.Portfolio;
 import com.achadaga.portfoliotracker.entities.Position;
 import com.achadaga.portfoliotracker.entities.TransactionLog;
-import java.io.File;
 import java.util.Collections;
 
 public class App {
@@ -176,10 +175,12 @@ public class App {
           }
           pChoice = portfolioMenu();
         }
-
       }
       usrChoice = mainMenu(MenuHeader.OTHER);
     }
+    // ask to save transaction log
+    AppService.saveSession(transactionLog);
+
     AppService.closeKeyboard();
     System.out.println("thank you for using portfoliotracker and tracker");
   }

@@ -10,8 +10,11 @@ import com.achadaga.portfoliotracker.entities.Transaction;
 import com.achadaga.portfoliotracker.entities.TransactionLog;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import com.opencsv.CSVWriterBuilder;
+import com.opencsv.ICSVWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -95,6 +98,7 @@ public class AppService {
           transactionLog.addTransaction(t);
           portfolio.addTransaction(t);
         }
+        csvReader.close();
       } catch (Exception e) {
         System.out.println("There was an error in reading the file");
       }
@@ -262,6 +266,46 @@ public class AppService {
     String prompt = "enter ticker: ";
     String ticker = collectTicker(prompt);
     return p.findPosition(ticker);
+  }
+
+  /**
+   * Save the contents of this transaction log to an external CSV file to be loaded into another
+   * session
+   *
+   * @param transactionLog the transaction log from which to read from
+   */
+  public static void saveSession(TransactionLog transactionLog) {
+    System.out.print("Would you like to save your session? (Y/n) ");
+    String inp = usrInput.nextLine().substring(0, 1);
+    while (!inp.equalsIgnoreCase("y") && !inp.equalsIgnoreCase("n")) {
+      System.out.print("(Y/n) ");
+      inp = usrInput.nextLine().substring(0, 1);
+    }
+
+    if (inp.equalsIgnoreCase("y")) {
+      // save the results to a CSV file
+      CSVFileChooser fileChooser = new CSVFileChooser();
+      File f = fileChooser.saveFile();
+      try {
+        FileWriter writer = new FileWriter(f);
+        ICSVWriter csvWriter = new CSVWriterBuilder(writer).withSeparator(',').build();
+        csvWriter.writeNext(new String[]{"transactiontype", "ticker", "price", "quantity",
+            "date"}, false);
+        for (Transaction transaction : transactionLog) {
+          String[] line = new String[5];
+          line[0] = transaction instanceof Buy ? "buy" : "sell";
+          line[1] = transaction.getTicker();
+          line[2] = transaction.getPrice().toString();
+          line[3] = transaction.getQuantity().toString();
+          LocalDate date = transaction.getDate();
+          line[4] = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
+          csvWriter.writeNext(line, false);
+        }
+        csvWriter.close();
+      } catch (Exception e) {
+        System.out.println("Error in writing the file");
+      }
+    }
   }
 
   /**
