@@ -85,14 +85,14 @@ public class AppService {
         String[] line;
         while ((line = csvReader.readNext()) != null) {
           String ticker = line[1];
-          if (!line[0].equalsIgnoreCase("buy") && !line[0].equalsIgnoreCase("sell")) {
-            System.out.println("Invalid File");
-            return;
-          }
           BigDecimal price = new BigDecimal(line[2]);
           BigDecimal quantity = new BigDecimal(line[3]);
           int[] d = strArrToIntArr(splitDate(line[4]));
           LocalDate date = LocalDate.of(d[0], d[1], d[2]);
+          if (!line[0].equalsIgnoreCase("buy") && !line[0].equalsIgnoreCase("sell")) {
+            System.out.println("Invalid File");
+            return;
+          }
           Transaction t = line[0].equalsIgnoreCase("buy") ? new Buy(ticker, price, quantity, date)
               : new Sell(ticker, price, quantity, date);
           transactionLog.addTransaction(t);
@@ -296,7 +296,7 @@ public class AppService {
           line[0] = transaction instanceof Buy ? "buy" : "sell";
           line[1] = transaction.getTicker();
           line[2] = transaction.getPrice().toString();
-          line[3] = transaction.getNumOfShares().toString();
+          line[3] = transaction.getQuantity().toString();
           LocalDate date = transaction.getDate();
           line[4] = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
           csvWriter.writeNext(line, false);
