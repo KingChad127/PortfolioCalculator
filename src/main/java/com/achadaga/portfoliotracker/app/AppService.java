@@ -75,7 +75,6 @@ public class AppService {
    */
   public static void enterTransactionByFile(TransactionLog transactionLog, Portfolio portfolio) {
     File f = collectFile();
-    int count = 0;
     if (f == null) {
       System.out.println("No transactions were added");
     } else {
@@ -96,17 +95,13 @@ public class AppService {
           LocalDate date = LocalDate.of(d[0], d[1], d[2]);
           Transaction t = line[0].equalsIgnoreCase("buy") ? new Buy(ticker, price, quantity, date)
               : new Sell(ticker, price, quantity, date);
-          boolean validTransaction = portfolio.addTransaction(t);
-          if (validTransaction) {
-            count++;
-            transactionLog.addTransaction(t);
-          }
+          transactionLog.addTransaction(t);
+          portfolio.addTransaction(t);
         }
         csvReader.close();
       } catch (Exception e) {
         System.out.println("There was an error in reading the file");
       }
-      System.out.println(count + " transactions added\n");
     }
   }
 
@@ -177,13 +172,9 @@ public class AppService {
     t = type.equalsIgnoreCase("buy") ? new Buy(ticker, price, quantity, date)
         : new Sell(ticker, price, quantity, date);
 
-    // add this transaction to both the transaction log and the user portfolio if valid
-    boolean validTransaction = portfolio.addTransaction(t);
-    if (validTransaction) {
-      transactionLog.addTransaction(t);
-    } else {
-      System.out.println("invalid transaction not added");
-    }
+    // add this transaction to both the transaction log and the user portfolio
+    transactionLog.addTransaction(t);
+    portfolio.addTransaction(t);
 
     // confirm whether the user wants to add more transactions
     System.out.print("add more? (Y/n) ");
@@ -298,8 +289,8 @@ public class AppService {
       try {
         FileWriter writer = new FileWriter(f);
         ICSVWriter csvWriter = new CSVWriterBuilder(writer).withSeparator(',').build();
-        csvWriter.writeNext(new String[]{"transactiontype", "ticker", "price", "quantity", "date"},
-            false);
+        csvWriter.writeNext(new String[]{"transactiontype", "ticker", "price", "quantity",
+            "date"}, false);
         for (Transaction transaction : transactionLog) {
           String[] line = new String[5];
           line[0] = transaction instanceof Buy ? "buy" : "sell";
