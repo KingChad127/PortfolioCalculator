@@ -91,6 +91,15 @@ public class App {
     return AppService.menuChoice(new char[]{'1', '2', '3', '4'});
   }
 
+  public int portfolioValidationMenu() {
+    System.out.println("Options: ");
+    System.out.println("\t1. edit your transaction file then select this option");
+    System.out.println("\t2. add more positions manually");
+    System.out.println("\t3. remove transactions manually");
+    System.out.println("\t4. quit");
+    return AppService.menuChoice(new char[]{'1', '2', '3', '4'});
+  }
+
   /**
    * Driver for the app. Controls main app/menu logic and runs the appropriate the AppServices
    */
@@ -114,6 +123,27 @@ public class App {
               cont = AppService.enterTransaction(transactionLog, usrPortfolio);
             }
           }
+        }
+        boolean valid = usrPortfolio.validatePortfolio();
+        while (!valid) {
+          System.out.println("one or more positions were found with less than 0 shares.");
+          int vChoice = portfolioValidationMenu();
+          if (vChoice == 1) {
+            AppService.enterTransactionByFile(transactionLog, usrPortfolio);
+          } else if (vChoice == 2) {
+            boolean cont = AppService.enterTransaction(transactionLog, usrPortfolio);
+            // keep entering transactions until the user signals he or she is done
+            while (cont) {
+              cont = AppService.enterTransaction(transactionLog, usrPortfolio);
+            }
+          } else if (vChoice == 3) {
+            System.out.println(transactionLog);
+            System.out.println(
+                AppService.removeTransactions(transactionLog, usrPortfolio).printSubLog());
+          } else {
+            break;
+          }
+          valid = usrPortfolio.validatePortfolio();
         }
       } else if (usrChoice == 2) {
         // view transaction history

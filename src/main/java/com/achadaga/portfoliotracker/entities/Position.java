@@ -42,8 +42,8 @@ public class Position implements Comparable<Position> {
       avgCostPerShare = totalCostOfPurchasedShares.divide(totalSharesBought, RoundingMode.HALF_UP);
     } else if (t instanceof Sell) {
       totalSharesHeld = totalSharesHeld.subtract(t.getQuantity());
-//      totalCostOfPurchasedShares =
-//          totalCostOfPurchasedShares.subtract(t.getQuantity().multiply(t.getPrice()));
+      //      totalCostOfPurchasedShares =
+      //          totalCostOfPurchasedShares.subtract(t.getQuantity().multiply(t.getPrice()));
       BigDecimal diff = t.getPrice().subtract(avgCostPerShare);
       totalRealizedGain = totalRealizedGain.add(diff.multiply(t.getQuantity()));
 
@@ -52,6 +52,7 @@ public class Position implements Comparable<Position> {
 
   /**
    * Remove a single transaction from this position
+   *
    * @param t the transaction to remove
    */
   public void removeTransaction(Transaction t) {
@@ -67,6 +68,20 @@ public class Position implements Comparable<Position> {
       BigDecimal diff = t.getPrice().subtract(avgCostPerShare);
       totalRealizedGain = totalRealizedGain.subtract(diff.multiply(t.getQuantity()));
     }
+  }
+
+  /**
+   * @return the ticker for this position
+   */
+  public String getTicker() {
+    return ticker;
+  }
+
+  /**
+   * @return the transaction history
+   */
+  public Set<Transaction> getHistory() {
+    return history;
   }
 
   /**
@@ -86,15 +101,6 @@ public class Position implements Comparable<Position> {
   }
 
   /**
-   *
-   * @return the ticker for this position
-   */
-  public String getTicker() {
-    return ticker;
-  }
-
-  /**
-   *
    * @return the total number of shares currently held
    */
   public BigDecimal getTotalSharesHeld() {
@@ -102,7 +108,6 @@ public class Position implements Comparable<Position> {
   }
 
   /**
-   *
    * @return the average purchase cost per share
    */
   public BigDecimal getAvgCostPerShare() {
@@ -110,7 +115,6 @@ public class Position implements Comparable<Position> {
   }
 
   /**
-   *
    * @return the total number of transactions
    */
   public int size() {
