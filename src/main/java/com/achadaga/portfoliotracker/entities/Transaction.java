@@ -28,7 +28,7 @@ public abstract class Transaction implements Comparable<Transaction> {
     return price;
   }
 
-  public BigDecimal getQuantity() {
+  public BigDecimal getNumOfShares() {
     return quantity;
   }
 

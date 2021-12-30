@@ -36,12 +36,32 @@ public class Portfolio implements Iterable<Position> {
    * the transaction to an existing Position in the Portfolio
    *
    * @param t the transaction to add
+   * @return true if this transaction was added, false otherwise
    */
-  public void addTransaction(Transaction t) {
+  public boolean addTransaction(Transaction t) {
+    // validate sell transaction first before adding
+    Position p = portfolio.get(t.getTicker());
+    BigDecimal totalSharesHeldUpTo = new BigDecimal("0.0");
+    if (t instanceof Sell) {
+      if (p == null) {
+        // there are no shares to sell
+        // invalid transaction
+        return false;
+      } else {
+        BigDecimal cumulativeShares = p.rangeShares(t.getDate());
+        if (t.getNumOfShares().compareTo(cumulativeShares) > 0) {
+          // The total number of shares sold is greater than the number of shares held
+          // invalid transaction
+          return false;
+        }
+      }
+    }
+    // add a key value pair if it doesn't exist and the transaction is valid
     if (!portfolio.containsKey(t.getTicker())) {
       portfolio.put(t.getTicker(), new Position(t.getTicker()));
     }
     portfolio.get(t.getTicker()).addTransaction(t);
+    return true;
   }
 
   /**

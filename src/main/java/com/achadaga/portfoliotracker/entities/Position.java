@@ -3,6 +3,8 @@ package com.achadaga.portfoliotracker.entities;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import yahoofinance.YahooFinance;
@@ -36,22 +38,21 @@ public class Position implements Comparable<Position> {
     history.add(t);
     if (t instanceof Buy) {
       totalCostOfPurchasedShares = totalCostOfPurchasedShares.add(
-          t.getPrice().multiply(t.getQuantity()));
-      totalSharesHeld = totalSharesHeld.add(t.getQuantity());
-      totalSharesBought = totalSharesBought.add(t.getQuantity());
+          t.getPrice().multiply(t.getNumOfShares()));
+      totalSharesHeld = totalSharesHeld.add(t.getNumOfShares());
+      totalSharesBought = totalSharesBought.add(t.getNumOfShares());
       avgCostPerShare = totalCostOfPurchasedShares.divide(totalSharesBought, RoundingMode.HALF_UP);
     } else if (t instanceof Sell) {
-      totalSharesHeld = totalSharesHeld.subtract(t.getQuantity());
-//      totalCostOfPurchasedShares =
-//          totalCostOfPurchasedShares.subtract(t.getQuantity().multiply(t.getPrice()));
+      totalSharesHeld = totalSharesHeld.subtract(t.getNumOfShares());
       BigDecimal diff = t.getPrice().subtract(avgCostPerShare);
-      totalRealizedGain = totalRealizedGain.add(diff.multiply(t.getQuantity()));
+      totalRealizedGain = totalRealizedGain.add(diff.multiply(t.getNumOfShares()));
 
     }
   }
 
   /**
    * Remove a single transaction from this position
+   *
    * @param t the transaction to remove
    */
   public void removeTransaction(Transaction t) {
@@ -59,13 +60,13 @@ public class Position implements Comparable<Position> {
     // recalculate
     if (t instanceof Buy) {
       totalCostOfPurchasedShares = totalCostOfPurchasedShares.subtract(
-          t.getPrice().multiply(t.getQuantity()));
-      totalSharesHeld = totalSharesHeld.subtract(t.getQuantity());
+          t.getPrice().multiply(t.getNumOfShares()));
+      totalSharesHeld = totalSharesHeld.subtract(t.getNumOfShares());
       avgCostPerShare = totalCostOfPurchasedShares.divide(totalSharesHeld, RoundingMode.HALF_UP);
     } else if (t instanceof Sell) {
-      totalSharesHeld = totalSharesHeld.add(t.getQuantity());
+      totalSharesHeld = totalSharesHeld.add(t.getNumOfShares());
       BigDecimal diff = t.getPrice().subtract(avgCostPerShare);
-      totalRealizedGain = totalRealizedGain.subtract(diff.multiply(t.getQuantity()));
+      totalRealizedGain = totalRealizedGain.subtract(diff.multiply(t.getNumOfShares()));
     }
   }
 
@@ -86,7 +87,6 @@ public class Position implements Comparable<Position> {
   }
 
   /**
-   *
    * @return the ticker for this position
    */
   public String getTicker() {
@@ -94,7 +94,6 @@ public class Position implements Comparable<Position> {
   }
 
   /**
-   *
    * @return the total number of shares currently held
    */
   public BigDecimal getTotalSharesHeld() {
@@ -102,7 +101,6 @@ public class Position implements Comparable<Position> {
   }
 
   /**
-   *
    * @return the average purchase cost per share
    */
   public BigDecimal getAvgCostPerShare() {
@@ -110,7 +108,25 @@ public class Position implements Comparable<Position> {
   }
 
   /**
-   *
+   * @param end date
+   * @return the number of shares held up to a certain date
+   */
+  public BigDecimal rangeShares(LocalDate end) {
+    BigDecimal result = new BigDecimal("0.0");
+    boolean done = false;
+    Iterator<Transaction> it = history.iterator();
+    while (it.hasNext() && !done) {
+      Transaction t = it.next();
+      if (t.getDate().compareTo(end) > 0) {
+        done = true;
+      } else {
+        result = result.add(t.getNumOfShares());
+      }
+    }
+    return result;
+  }
+
+  /**
    * @return the total number of transactions
    */
   public int size() {

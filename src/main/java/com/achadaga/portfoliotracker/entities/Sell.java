@@ -17,7 +17,7 @@ public class Sell extends Transaction {
   public String toString() {
     BigDecimal roundedPrice = getPrice().setScale(2, RoundingMode.HALF_UP);
     return super.toString() + "\n\tSELL " + getTicker() + "\n\tsale price: $" + String.format(
-        "%.2f", roundedPrice) + "\n\tshares " + "sold: " + getQuantity() + "\n" + String.join("",
+        "%.2f", roundedPrice) + "\n\tshares " + "sold: " + getNumOfShares() + "\n" + String.join("",
         Collections.nCopies(WIDTH, "-"));
   }
 }
