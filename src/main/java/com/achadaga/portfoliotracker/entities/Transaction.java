@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public abstract class Transaction implements Comparable<Transaction> {
+
   // data
   private final String ticker;
   private final BigDecimal price;
@@ -44,8 +45,6 @@ public abstract class Transaction implements Comparable<Transaction> {
     return this.price.multiply(this.quantity);
   }
 
-
-
   /**
    * @param other transaction to compare this one to
    * @return a positive number if this transaction is older than other, 0 if this transaction
@@ -63,7 +62,9 @@ public abstract class Transaction implements Comparable<Transaction> {
 
   @Override
   public String toString() {
-    return "\n" + getDate().toString() + "\n\ttransaction ID: " + transactionID;
+    String date =
+        getDate().getMonthValue() + "-" + getDate().getDayOfMonth() + "-" + getDate().getYear();
+    return "\n" + date + "\n\ttransaction ID: " + transactionID;
   }
 
   @Override

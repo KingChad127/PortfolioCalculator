@@ -1,8 +1,11 @@
 package com.achadaga.portfoliotracker.entities;
 
+import static com.achadaga.portfoliotracker.app.Constants.WIDTH;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 import yahoofinance.YahooFinance;
@@ -144,7 +147,8 @@ public class Position implements Comparable<Position> {
   public String toString() {
     return ticker + "\n\taverage cost per share: $" + avgCostPerShare + "\n\tcurrent price: $"
         + currentPrice() + "\n\tshares held: " + totalSharesHeld + "\n\trealized gain: $"
-        + totalRealizedGain + "\n\tunrealized gain: $" + getUnrealized() + "\n";
+        + totalRealizedGain + "\n\tunrealized gain: $" + getUnrealized() + "\n" + String.join("",
+        Collections.nCopies(WIDTH, "-"));
   }
 
   @Override

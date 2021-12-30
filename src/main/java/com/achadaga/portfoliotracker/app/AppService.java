@@ -18,6 +18,7 @@ import java.io.FileWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
@@ -81,14 +82,20 @@ public class AppService {
       // try to add contents of file
       try {
         FileReader fileReader = new FileReader(f);
-        CSVReader csvReader = new CSVReaderBuilder(fileReader).withSkipLines(1).build();
+        CSVReader csvReader = new CSVReaderBuilder(fileReader).build();
+        String[] first = csvReader.readNext();
+        String[] magicVal = {"transactiontype","ticker","price","quantity","date"};
+        if (!Arrays.equals(first, magicVal)) {
+          System.out.println("File not identified as a transaction csv file.");
+          return;
+        }
         String[] line;
         while ((line = csvReader.readNext()) != null) {
           String ticker = line[1];
           BigDecimal price = new BigDecimal(line[2]);
           BigDecimal quantity = new BigDecimal(line[3]);
           int[] d = strArrToIntArr(splitDate(line[4]));
-          LocalDate date = LocalDate.of(d[0], d[1], d[2]);
+          LocalDate date = LocalDate.of(d[2], d[0], d[1]);
           if (!line[0].equalsIgnoreCase("buy") && !line[0].equalsIgnoreCase("sell")) {
             System.out.println("Invalid File");
             return;
@@ -162,8 +169,8 @@ public class AppService {
     BigDecimal quantity = collectBigDecimal(prompt, reprompt);
 
     // collect date of transactions
-    prompt = words[0] + " date (YYYY-MM-DD): ";
-    reprompt = "please enter a valid date (YYYY-MM-DD): ";
+    prompt = words[0] + " date (MM-DD-YYYY): ";
+    reprompt = "please enter a valid date (MM-DD-YYYY): ";
     LocalDate date = collectDate(prompt, reprompt);
 
     // we have the information needed to generate a transaction
@@ -203,20 +210,20 @@ public class AppService {
     String prompt, reprompt;
     if (inp.equalsIgnoreCase("range")) {
       // collect start date
-      prompt = "enter the start date (YYYY-MM-DD): ";
-      reprompt = "please enter a valid date (YYYY-MM-DD): ";
+      prompt = "enter the start date (MM-DD-YYYY): ";
+      reprompt = "please enter a valid date (MM-DD-YYYY): ";
       LocalDate start = collectDate(prompt, reprompt);
       // collect end date
-      prompt = "enter the end date (YYYY-MM-DD): ";
-      reprompt = "please enter a valid date (YYYY-MM-DD): ";
+      prompt = "enter the end date (MM-DD-YYYY): ";
+      reprompt = "please enter a valid date (MM-DD-YYYY): ";
       LocalDate end = collectDate(prompt, reprompt);
 
       System.out.println("transactions that meet your criteria: ");
       return transactionLog.searchByDate(start, end);
     } else {
       // collect single date
-      prompt = "enter date (YYYY-MM-DD): ";
-      reprompt = "please enter a valid date (YYYY-MM-DD): ";
+      prompt = "enter date (MM-DD-YYYY): ";
+      reprompt = "please enter a valid date (MM-DD-YYYY): ";
       LocalDate d = collectDate(prompt, reprompt);
 
       System.out.println("transactions that meet your criteria: ");
@@ -364,7 +371,7 @@ public class AppService {
       d = splitDate(inp);
     }
     int[] date = strArrToIntArr(d);
-    return LocalDate.of(date[0], date[1], date[2]);
+    return LocalDate.of(date[2], date[0], date[1]);
   }
 
   /**
@@ -439,12 +446,12 @@ public class AppService {
    * @return false if date can be used to create a LocalDate, true otherwise
    */
   private static boolean invalidDate(String[] date) {
-    if (date[0].length() != 4) {
+    if (date[2].length() != 4) {
       return true;
     }
     try {
       int[] d = strArrToIntArr(date);
-      LocalDate localDate = LocalDate.of(d[0], d[1], d[2]);
+      LocalDate localDate = LocalDate.of(d[2], d[0], d[1]);
       if (localDate.isAfter(LocalDate.now())) {
         return false;
       }
