@@ -34,6 +34,12 @@
   </build>
 
   <dependencies>
+
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongodb-driver-sync</artifactId>
+      <version>4.4.0</version>
+    </dependency>
     <dependency>
       <artifactId>YahooFinanceAPI</artifactId>
       <groupId>com.yahoofinance-api</groupId>
