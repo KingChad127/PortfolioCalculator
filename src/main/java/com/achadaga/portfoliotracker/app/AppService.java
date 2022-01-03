@@ -84,7 +84,7 @@ public class AppService {
         FileReader fileReader = new FileReader(f);
         CSVReader csvReader = new CSVReaderBuilder(fileReader).build();
         String[] first = csvReader.readNext();
-        String[] magicVal = {"transactiontype","ticker","price","quantity","date"};
+        String[] magicVal = {"transactiontype", "ticker", "price", "quantity", "date", "dayorder"};
         if (!Arrays.equals(first, magicVal)) {
           System.out.println("File not identified as a transaction csv file.");
           return;
@@ -96,12 +96,14 @@ public class AppService {
           BigDecimal quantity = new BigDecimal(line[3]);
           int[] d = strArrToIntArr(splitDate(line[4]));
           LocalDate date = LocalDate.of(d[2], d[0], d[1]);
+          int dayOrder = Integer.parseInt(line[5]);
           if (!line[0].equalsIgnoreCase("buy") && !line[0].equalsIgnoreCase("sell")) {
             System.out.println("Invalid File");
             return;
           }
-          Transaction t = line[0].equalsIgnoreCase("buy") ? new Buy(ticker, price, quantity, date)
-              : new Sell(ticker, price, quantity, date);
+          Transaction t =
+              line[0].equalsIgnoreCase("buy") ? new Buy(ticker, price, quantity, date, dayOrder)
+                  : new Sell(ticker, price, quantity, date, dayOrder);
           transactionLog.addTransaction(t);
           portfolio.addTransaction(t);
         }
@@ -173,11 +175,16 @@ public class AppService {
     reprompt = "please enter a valid date (MM-DD-YYYY): ";
     LocalDate date = collectDate(prompt, reprompt);
 
+    // collect the day order of transaction
+    prompt = "transaction order in day (enter 1, 2, 3...): ";
+    reprompt = "please enter an integer greater 0: ";
+    int ofDay = collectInt(prompt, reprompt);
+
     // we have the information needed to generate a transaction
     // create a new transaction based on the user input
     Transaction t;
-    t = type.equalsIgnoreCase("buy") ? new Buy(ticker, price, quantity, date)
-        : new Sell(ticker, price, quantity, date);
+    t = type.equalsIgnoreCase("buy") ? new Buy(ticker, price, quantity, date, ofDay)
+        : new Sell(ticker, price, quantity, date, ofDay);
 
     // add this transaction to both the transaction log and the user portfolio
     transactionLog.addTransaction(t);
@@ -296,14 +303,14 @@ public class AppService {
       try {
         FileWriter writer = new FileWriter(f);
         ICSVWriter csvWriter = new CSVWriterBuilder(writer).withSeparator(',').build();
-        csvWriter.writeNext(new String[]{"transactiontype", "ticker", "price", "quantity",
-            "date"}, false);
+        csvWriter.writeNext(new String[]{"transactiontype", "ticker", "price", "quantity", "date"},
+            false);
         for (Transaction transaction : transactionLog) {
           String[] line = new String[5];
           line[0] = transaction instanceof Buy ? "buy" : "sell";
           line[1] = transaction.getTicker();
           line[2] = transaction.getPrice().toString();
-          line[3] = transaction.getQuantity().toString();
+          line[3] = transaction.getNumShares().toString();
           LocalDate date = transaction.getDate();
           line[4] = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
           csvWriter.writeNext(line, false);
@@ -372,6 +379,23 @@ public class AppService {
     }
     int[] date = strArrToIntArr(d);
     return LocalDate.of(date[2], date[0], date[1]);
+  }
+
+  /**
+   * Prompt the user, collect and verify a valid int
+   *
+   * @param prompt   the first prompt the user sees
+   * @param reprompt a reprompt should the user enter an invalid value
+   * @return a valid LocalDate
+   */
+  private static int collectInt(String prompt, String reprompt) {
+    System.out.print(prompt);
+    String inp = usrInput.nextLine();
+    while (invalidInt(inp.substring(0, 1))) {
+      System.out.print(reprompt);
+      inp = usrInput.nextLine();
+    }
+    return Integer.parseInt(inp.substring(0, 1));
   }
 
   /**
@@ -456,6 +480,21 @@ public class AppService {
         return false;
       }
       return false;
+    } catch (Exception e) {
+      return true;
+    }
+  }
+
+  /**
+   * Verify whether a string can be converted into an integer
+   *
+   * @param s to be turned into an int
+   * @return true if s cannot be turned into an int, false if otherwise
+   */
+  private static boolean invalidInt(String s) {
+    try {
+      int x = Integer.parseInt(s);
+      return x < 1;
     } catch (Exception e) {
       return true;
     }

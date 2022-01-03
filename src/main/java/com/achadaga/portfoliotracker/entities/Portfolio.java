@@ -3,7 +3,6 @@ package com.achadaga.portfoliotracker.entities;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 public class Portfolio implements Iterable<Position> {
@@ -119,19 +118,11 @@ public class Portfolio implements Iterable<Position> {
    *
    * @return true if this portfolio is valid, false otherwise
    */
-  public boolean validatePortfolio() {
+  public boolean validateAndCalculatePortfolio() {
     for (Position p : this) {
-      Set<Transaction> hist = p.getHistory();
-      BigDecimal runningTotal = new BigDecimal("0.0");
-      for (Transaction t : hist) {
-        if (t instanceof Buy) {
-          runningTotal = runningTotal.add(t.getQuantity());
-        } else {
-          runningTotal = runningTotal.subtract(t.getQuantity());
-        }
-        if (runningTotal.compareTo(new BigDecimal("0.0")) < 0) {
-          return false;
-        }
+      boolean valid = p.calculate();
+      if (!valid) {
+        return false;
       }
     }
     return true;

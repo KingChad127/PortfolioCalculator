@@ -9,15 +9,16 @@ import java.util.Collections;
 
 public class Sell extends Transaction {
 
-  public Sell(String ticker, BigDecimal salePrice, BigDecimal quantity, LocalDate sellDate) {
-    super(ticker, salePrice, quantity, sellDate);
+  public Sell(String ticker, BigDecimal salePrice, BigDecimal quantity, LocalDate sellDate,
+      int dayOrder) {
+    super(ticker, salePrice, quantity, sellDate, dayOrder);
   }
 
   @Override
   public String toString() {
     BigDecimal roundedPrice = getPrice().setScale(2, RoundingMode.HALF_UP);
     return super.toString() + "\n\tSELL " + getTicker() + "\n\tsale price: $" + String.format(
-        "%.2f", roundedPrice) + "\n\tshares " + "sold: " + getQuantity() + "\n" + String.join("",
+        "%.2f", roundedPrice) + "\n\tshares " + "sold: " + getNumShares() + "\n" + String.join("",
         Collections.nCopies(WIDTH, "-"));
   }
 }

@@ -9,55 +9,79 @@ public abstract class Transaction implements Comparable<Transaction> {
   // data
   private final String ticker;
   private final BigDecimal price;
-  private final BigDecimal quantity; // support fractional shares as well
+  private final BigDecimal numShares; // support fractional shares as well
   private final LocalDate date;
+  private final int dayOrder;
   private final UUID transactionID;
 
-  public Transaction(String ticker, BigDecimal price, BigDecimal quantity, LocalDate date) {
+  public Transaction(String ticker, BigDecimal price, BigDecimal numShares, LocalDate date,
+      int dayOrder) {
     this.ticker = ticker;
     this.price = price;
-    this.quantity = quantity;
+    this.numShares = numShares;
     this.date = date;
+    this.dayOrder = dayOrder;
     this.transactionID = UUID.randomUUID();
   }
 
+  /**
+   * @return ticker of this transaction
+   */
   public String getTicker() {
     return ticker;
   }
 
+  /**
+   * @return the price of the ticker during this transaction
+   */
   public BigDecimal getPrice() {
     return price;
   }
 
-  public BigDecimal getQuantity() {
-    return quantity;
+  /**
+   * @return the number of shares being traded
+   */
+  public BigDecimal getNumShares() {
+    return numShares;
   }
 
+  /**
+   * @return The date of the transaction in MM/DD/YYYY form
+   */
   public LocalDate getDate() {
     return date;
   }
 
+  /**
+   * @return the transaction order within a specific day - used for ordering ties that occur
+   * within a specific day.
+   */
+  public int getOfDay() {
+    return dayOrder;
+  }
+
+  /**
+   * @return the UUID for this transaction
+   */
   public UUID getTransactionID() {
     return transactionID;
   }
 
-  public BigDecimal getTotalCost() {
-    return this.price.multiply(this.quantity);
-  }
-
   /**
    * @param other transaction to compare this one to
-   * @return a positive number if this transaction is older than other, 0 if this transaction
-   * occurred on the same date, and negative otherwise. Break ties by going to the UUIDs
+   * @return a positive number if this transaction is older than other, negative otherwise. Break
+   * ties using the UUID but in theory shouldn't be used
    */
   @Override
   public int compareTo(Transaction other) {
     int dateComparison = other.date.compareTo(this.getDate());
     if (dateComparison != 0) {
       return dateComparison;
-    } else {
-      return other.transactionID.compareTo(this.transactionID);
     }
+    if (this.dayOrder != other.getOfDay()) {
+      return other.dayOrder - this.dayOrder;
+    }
+    return other.transactionID.compareTo(this.transactionID);
   }
 
   @Override

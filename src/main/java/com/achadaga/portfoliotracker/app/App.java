@@ -82,7 +82,6 @@ public class App {
    * @return the user's menu choice
    */
   public int portfolioMenu() {
-    //System.out.println("-".repeat(WIDTH));
     System.out.println("Options: ");
     System.out.println("\t1. look up position");
     System.out.println("\t2. list winning positions");
@@ -124,7 +123,8 @@ public class App {
             }
           }
         }
-        boolean valid = usrPortfolio.validatePortfolio();
+        // verify that the user porfolio is valid
+        boolean valid = usrPortfolio.validateAndCalculatePortfolio();
         while (!valid) {
           System.out.println("one or more positions were found with less than 0 shares.");
           int vChoice = portfolioValidationMenu();
@@ -143,7 +143,7 @@ public class App {
           } else {
             break;
           }
-          valid = usrPortfolio.validatePortfolio();
+          valid = usrPortfolio.validateAndCalculatePortfolio();
         }
       } else if (usrChoice == 2) {
         // view transaction history

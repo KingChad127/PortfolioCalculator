@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test;
 class TransactionLogTest {
 
   static Transaction[] transactions = {
-      new Buy("AEHR", new BigDecimal("5.35"), new BigDecimal("4"), LocalDate.of(2021, 7, 15)),
-      new Buy("NVDA", new BigDecimal("334.45"), new BigDecimal("2"), LocalDate.of(2021, 5, 4)),
-      new Sell("AEHR", new BigDecimal("24.15"), new BigDecimal("4"), LocalDate.of(2021, 8, 25)),
-      new Buy("AAPL", new BigDecimal("125.06"), new BigDecimal("6"), LocalDate.of(2021, 2, 7)),
-      new Sell("NVDA", new BigDecimal("280.68"), new BigDecimal("1"), LocalDate.of(2021, 7, 12)),
-      new Buy("AMD", new BigDecimal("80.78"), new BigDecimal("2.7"), LocalDate.of(2021, 7, 12))};
+      new Buy("AEHR", new BigDecimal("5.35"), new BigDecimal("4"), LocalDate.of(2021, 7, 15), 1),
+      new Buy("NVDA", new BigDecimal("334.45"), new BigDecimal("2"), LocalDate.of(2021, 5, 4), 1),
+      new Sell("AEHR", new BigDecimal("24.15"), new BigDecimal("4"), LocalDate.of(2021, 8, 25), 1),
+      new Buy("AAPL", new BigDecimal("125.06"), new BigDecimal("6"), LocalDate.of(2021, 2, 7), 1),
+      new Sell("NVDA", new BigDecimal("280.68"), new BigDecimal("1"), LocalDate.of(2021, 7, 12), 1),
+      new Buy("AMD", new BigDecimal("80.78"), new BigDecimal("2.7"), LocalDate.of(2021, 7, 12), 2)};
 
   static TransactionLog log = new TransactionLog();
   static Transaction[] sorted = Arrays.copyOf(transactions, transactions.length);

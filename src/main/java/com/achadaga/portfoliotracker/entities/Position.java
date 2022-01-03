@@ -1,11 +1,14 @@
 package com.achadaga.portfoliotracker.entities;
 
 import static com.achadaga.portfoliotracker.app.Constants.WIDTH;
+import static com.achadaga.portfoliotracker.app.Constants.zero;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import yahoofinance.YahooFinance;
@@ -22,7 +25,7 @@ public class Position implements Comparable<Position> {
 
   public Position(String ticker) {
     this.ticker = ticker;
-    this.history = new TreeSet<>();
+    this.history = new HashSet<>();
     this.totalCostOfPurchasedShares = new BigDecimal("0.0");
     this.totalSharesHeld = new BigDecimal("0.0");
     this.avgCostPerShare = new BigDecimal("0.0");
@@ -37,20 +40,6 @@ public class Position implements Comparable<Position> {
    */
   public void addTransaction(Transaction t) {
     history.add(t);
-    if (t instanceof Buy) {
-      totalCostOfPurchasedShares = totalCostOfPurchasedShares.add(
-          t.getPrice().multiply(t.getQuantity()));
-      totalSharesHeld = totalSharesHeld.add(t.getQuantity());
-      totalSharesBought = totalSharesBought.add(t.getQuantity());
-      avgCostPerShare = totalCostOfPurchasedShares.divide(totalSharesBought, RoundingMode.HALF_UP);
-    } else if (t instanceof Sell) {
-      totalSharesHeld = totalSharesHeld.subtract(t.getQuantity());
-      //      totalCostOfPurchasedShares =
-      //          totalCostOfPurchasedShares.subtract(t.getQuantity().multiply(t.getPrice()));
-      BigDecimal diff = t.getPrice().subtract(avgCostPerShare);
-      totalRealizedGain = totalRealizedGain.add(diff.multiply(t.getQuantity()));
-
-    }
   }
 
   /**
@@ -60,17 +49,39 @@ public class Position implements Comparable<Position> {
    */
   public void removeTransaction(Transaction t) {
     history.remove(t);
-    // recalculate
-    if (t instanceof Buy) {
-      totalCostOfPurchasedShares = totalCostOfPurchasedShares.subtract(
-          t.getPrice().multiply(t.getQuantity()));
-      totalSharesHeld = totalSharesHeld.subtract(t.getQuantity());
-      avgCostPerShare = totalCostOfPurchasedShares.divide(totalSharesHeld, RoundingMode.HALF_UP);
-    } else if (t instanceof Sell) {
-      totalSharesHeld = totalSharesHeld.add(t.getQuantity());
-      BigDecimal diff = t.getPrice().subtract(avgCostPerShare);
-      totalRealizedGain = totalRealizedGain.subtract(diff.multiply(t.getQuantity()));
+  }
+
+  /**
+   * Calculate the stats that go with this position
+   *
+   * @return true if this position is valid, false if otherwise
+   */
+  public boolean calculate() {
+    TreeSet<Transaction> sorted = new TreeSet<>(history);
+    Iterator<Transaction> reverseIt = sorted.descendingIterator();
+    while (reverseIt.hasNext()) {
+      Transaction t = reverseIt.next();
+      BigDecimal numShares = t.getNumShares();
+      BigDecimal price = t.getPrice();
+
+      if (t instanceof Buy) {
+        totalSharesHeld = totalSharesHeld.add(numShares);
+        totalSharesBought = totalSharesBought.add(numShares);
+        totalCostOfPurchasedShares = totalCostOfPurchasedShares.add(price.multiply(numShares));
+        avgCostPerShare = totalCostOfPurchasedShares.divide(totalSharesBought,
+            RoundingMode.HALF_UP);
+      }
+      if (t instanceof Sell) {
+        totalSharesHeld = totalSharesHeld.subtract(numShares);
+        // totalSharesHeld should never go below zero
+        if (totalSharesHeld.compareTo(zero) < 0) {
+          return false;
+        }
+        BigDecimal diff = price.subtract(avgCostPerShare);
+        totalRealizedGain = totalRealizedGain.add(diff.multiply(numShares));
+      }
     }
+    return true;
   }
 
   /**
@@ -92,7 +103,8 @@ public class Position implements Comparable<Position> {
    * be made from selling the current shares held.
    */
   public BigDecimal getUnrealized() {
-    return currentPrice().subtract(avgCostPerShare).multiply(totalSharesHeld);
+    BigDecimal diff = currentPrice().subtract(avgCostPerShare);
+    return diff.multiply(totalSharesHeld);
   }
 
   /**
