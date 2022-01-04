@@ -1,6 +1,7 @@
 package com.achadaga.portfoliotracker.entities;
 
-import java.math.BigDecimal;
+import static com.achadaga.portfoliotracker.app.Constants.decimalFormat;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -65,10 +66,10 @@ public class Portfolio implements Iterable<Position> {
   /**
    * @return the total realized gains from this portfolio
    */
-  private BigDecimal totalRealized() {
-    BigDecimal total = new BigDecimal("0.0");
+  private double totalRealized() {
+    double total = 0.0;
     for (Position p : portfolio.values()) {
-      total = total.add(p.getRealized());
+      total += p.getRealized();
     }
     return total;
   }
@@ -76,10 +77,10 @@ public class Portfolio implements Iterable<Position> {
   /**
    * @return the total unrealized gains from this portfolio
    */
-  private BigDecimal totalUnrealized() {
-    BigDecimal total = new BigDecimal("0.0");
+  private double totalUnrealized() {
+    double total = 0.0;
     for (Position p : portfolio.values()) {
-      total = total.add(p.getUnrealized());
+      total += p.getUnrealized();
     }
     return total;
   }
@@ -90,8 +91,8 @@ public class Portfolio implements Iterable<Position> {
   public Portfolio winningPositions() {
     Map<String, Position> result = new TreeMap<>();
     for (Position p : this) {
-      BigDecimal r = p.getRealized().add(p.getUnrealized());
-      if (r.signum() >= 0) {
+      double r = p.getRealized() + p.getUnrealized();
+      if (r >= 0.0) {
         result.put(p.getTicker(), p);
       }
     }
@@ -104,8 +105,8 @@ public class Portfolio implements Iterable<Position> {
   public Portfolio losingPositions() {
     Map<String, Position> result = new TreeMap<>();
     for (Position p : this) {
-      BigDecimal r = p.getRealized().add(p.getUnrealized());
-      if (r.signum() < 0) {
+      double r = p.getRealized() + p.getUnrealized();
+      if (r < 0.0) {
         result.put(p.getTicker(), p);
       }
     }
@@ -140,8 +141,8 @@ public class Portfolio implements Iterable<Position> {
     for (Position p : portfolio.values()) {
       output.append(p.toString()).append('\n');
     }
-    output.append("total realized gains/losses: $").append(totalRealized());
-    output.append("\ntotal unrealized gains/losses: $").append(totalUnrealized());
+    output.append("total realized gains/losses: $").append(decimalFormat(totalRealized()));
+    output.append("\ntotal unrealized gains/losses: $").append(decimalFormat(totalUnrealized()));
     return output.toString();
   }
 }

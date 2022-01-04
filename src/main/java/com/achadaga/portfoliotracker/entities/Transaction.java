@@ -1,6 +1,5 @@
 package com.achadaga.portfoliotracker.entities;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -8,13 +7,13 @@ public abstract class Transaction implements Comparable<Transaction> {
 
   // data
   private final String ticker;
-  private final BigDecimal price;
-  private final BigDecimal numShares; // support fractional shares as well
+  private final double price;
+  private final double numShares; // support fractional shares as well
   private final LocalDate date;
   private final int dayOrder;
   private final UUID transactionID;
 
-  public Transaction(String ticker, BigDecimal price, BigDecimal numShares, LocalDate date,
+  public Transaction(String ticker, double price, double numShares, LocalDate date,
       int dayOrder) {
     this.ticker = ticker;
     this.price = price;
@@ -34,14 +33,14 @@ public abstract class Transaction implements Comparable<Transaction> {
   /**
    * @return the price of the ticker during this transaction
    */
-  public BigDecimal getPrice() {
+  public double getPrice() {
     return price;
   }
 
   /**
    * @return the number of shares being traded
    */
-  public BigDecimal getNumShares() {
+  public double getNumShares() {
     return numShares;
   }
 

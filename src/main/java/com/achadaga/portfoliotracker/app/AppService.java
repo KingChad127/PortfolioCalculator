@@ -92,8 +92,8 @@ public class AppService {
         String[] line;
         while ((line = csvReader.readNext()) != null) {
           String ticker = line[1];
-          BigDecimal price = new BigDecimal(line[2]);
-          BigDecimal quantity = new BigDecimal(line[3]);
+          double price = Double.parseDouble(line[2]);
+          double quantity = Double.parseDouble(line[3]);
           int[] d = strArrToIntArr(splitDate(line[4]));
           LocalDate date = LocalDate.of(d[2], d[0], d[1]);
           int dayOrder = Integer.parseInt(line[5]);
@@ -163,12 +163,12 @@ public class AppService {
     // collect transaction price
     prompt = words[0] + " price: $";
     reprompt = "please enter a valid " + words[0] + " price: $";
-    BigDecimal price = collectBigDecimal(prompt, reprompt);
+    double price = collectDouble(prompt, reprompt);
 
     // collect number of shares
     prompt = "number of shares " + words[1] + ": ";
     reprompt = "please enter a valid number of shares " + words[1] + ": ";
-    BigDecimal quantity = collectBigDecimal(prompt, reprompt);
+    double quantity = collectDouble(prompt, reprompt);
 
     // collect date of transactions
     prompt = words[0] + " date (MM-DD-YYYY): ";
@@ -309,8 +309,8 @@ public class AppService {
           String[] line = new String[5];
           line[0] = transaction instanceof Buy ? "buy" : "sell";
           line[1] = transaction.getTicker();
-          line[2] = transaction.getPrice().toString();
-          line[3] = transaction.getNumShares().toString();
+          line[2] = Double.toString(transaction.getPrice());
+          line[3] = Double.toString(transaction.getNumShares());
           LocalDate date = transaction.getDate();
           line[4] = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
           csvWriter.writeNext(line, false);
@@ -405,14 +405,14 @@ public class AppService {
    * @param reprompt the reprompt should the user enter an invalid value
    * @return a valid BigDecimal
    */
-  private static BigDecimal collectBigDecimal(String prompt, String reprompt) {
+  private static double collectDouble(String prompt, String reprompt) {
     System.out.print(prompt);
     String p = usrInput.nextLine();
-    while (inValidDB(p)) {
+    while (isValidDouble(p)) {
       System.out.print(reprompt);
       p = usrInput.nextLine();
     }
-    return new BigDecimal(p);
+    return Double.parseDouble(p);
   }
 
   /**
@@ -431,14 +431,14 @@ public class AppService {
   }
 
   /**
-   * Validate the user inputted BigDecimal. Used for validating user input of price and quantity
+   * Validate the user inputted double. Used for validating user input of price and quantity
    *
-   * @param s string representation of a possible BigDecimal
-   * @return false if s can be converted to a BigDecimal, true otherwise.
+   * @param s string representation of a possible double
+   * @return false if s can be converted to a double, true otherwise.
    */
-  private static boolean inValidDB(String s) {
+  private static boolean isValidDouble(String s) {
     try {
-      new BigDecimal(s);
+      Double.parseDouble(s);
       return false;
     } catch (Exception e) {
       return true;

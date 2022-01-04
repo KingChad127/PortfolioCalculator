@@ -1,11 +1,9 @@
 package com.achadaga.portfoliotracker.entities;
 
 import static com.achadaga.portfoliotracker.app.Constants.WIDTH;
-import static com.achadaga.portfoliotracker.app.Constants.zero;
+import static com.achadaga.portfoliotracker.app.Constants.decimalFormat;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,20 +15,15 @@ public class Position implements Comparable<Position> {
 
   private final String ticker;
   private final Set<Transaction> history; // contains all transactions of this ticker
-  private BigDecimal totalCostOfPurchasedShares;
-  private BigDecimal totalSharesHeld;
-  private BigDecimal totalSharesBought;
-  private BigDecimal avgCostPerShare;
-  private BigDecimal totalRealizedGain;
+  private double totalCostOfPurchasedShares;
+  private double totalSharesHeld;
+  private double totalSharesBought;
+  private double avgCostPerShare;
+  private double totalRealizedGain;
 
   public Position(String ticker) {
     this.ticker = ticker;
     this.history = new HashSet<>();
-    this.totalCostOfPurchasedShares = new BigDecimal("0.0");
-    this.totalSharesHeld = new BigDecimal("0.0");
-    this.avgCostPerShare = new BigDecimal("0.0");
-    this.totalRealizedGain = new BigDecimal("0.0");
-    this.totalSharesBought = new BigDecimal("0.0");
   }
 
   /**
@@ -61,24 +54,23 @@ public class Position implements Comparable<Position> {
     Iterator<Transaction> reverseIt = sorted.descendingIterator();
     while (reverseIt.hasNext()) {
       Transaction t = reverseIt.next();
-      BigDecimal numShares = t.getNumShares();
-      BigDecimal price = t.getPrice();
+      double numShares = t.getNumShares();
+      double price = t.getPrice();
 
       if (t instanceof Buy) {
-        totalSharesHeld = totalSharesHeld.add(numShares);
-        totalSharesBought = totalSharesBought.add(numShares);
-        totalCostOfPurchasedShares = totalCostOfPurchasedShares.add(price.multiply(numShares));
-        avgCostPerShare = totalCostOfPurchasedShares.divide(totalSharesBought,
-            RoundingMode.HALF_UP);
+        totalSharesHeld += numShares;
+        totalSharesBought += numShares;
+        totalCostOfPurchasedShares += (price * numShares);
+        avgCostPerShare = totalCostOfPurchasedShares / totalSharesBought;
       }
       if (t instanceof Sell) {
-        totalSharesHeld = totalSharesHeld.subtract(numShares);
+        totalSharesHeld -= numShares;
         // totalSharesHeld should never go below zero
-        if (totalSharesHeld.compareTo(zero) < 0) {
+        if (totalSharesHeld < 0.0) {
           return false;
         }
-        BigDecimal diff = price.subtract(avgCostPerShare);
-        totalRealizedGain = totalRealizedGain.add(diff.multiply(numShares));
+        double diff = price - avgCostPerShare;
+        totalRealizedGain += (diff * numShares);
       }
     }
     return true;
@@ -102,30 +94,30 @@ public class Position implements Comparable<Position> {
    * @return the unrealized gain for this position. the unrealized gain is the money that could
    * be made from selling the current shares held.
    */
-  public BigDecimal getUnrealized() {
-    BigDecimal diff = currentPrice().subtract(avgCostPerShare);
-    return diff.multiply(totalSharesHeld);
+  public double getUnrealized() {
+    double diff = currentPrice() - avgCostPerShare;
+    return diff * totalSharesHeld;
   }
 
   /**
    * @return the realized gain for this position. The realized gain is the actual money made from
    * selling shares of this position
    */
-  public BigDecimal getRealized() {
+  public double getRealized() {
     return totalRealizedGain;
   }
 
   /**
    * @return the total number of shares currently held
    */
-  public BigDecimal getTotalSharesHeld() {
+  public double getTotalSharesHeld() {
     return totalSharesHeld;
   }
 
   /**
    * @return the average purchase cost per share
    */
-  public BigDecimal getAvgCostPerShare() {
+  public double getAvgCostPerShare() {
     return avgCostPerShare;
   }
 
@@ -141,12 +133,12 @@ public class Position implements Comparable<Position> {
    *
    * @return the current price as a BigDecimal
    */
-  public BigDecimal currentPrice() {
+  public double currentPrice() {
     try {
-      return YahooFinance.get(ticker).getQuote().getPrice();
+      return YahooFinance.get(ticker).getQuote().getPrice().doubleValue();
     } catch (IOException e) {
       System.out.println("Error");
-      return null;
+      return -1.0;
     }
   }
 
@@ -157,10 +149,11 @@ public class Position implements Comparable<Position> {
 
   @Override
   public String toString() {
-    return ticker + "\n\taverage cost per share: $" + avgCostPerShare + "\n\tcurrent price: $"
-        + currentPrice() + "\n\tshares held: " + totalSharesHeld + "\n\trealized gain: $"
-        + totalRealizedGain + "\n\tunrealized gain: $" + getUnrealized() + "\n" + String.join("",
-        Collections.nCopies(WIDTH, "-"));
+    return ticker + "\n\taverage cost per share: $" + decimalFormat(avgCostPerShare)
+        + "\n\tcurrent price: $" + decimalFormat(currentPrice()) + "\n\tshares held: "
+        + decimalFormat(totalSharesHeld) + "\n" + "\trealized gain: $" + decimalFormat(
+        totalRealizedGain) + "\n\tunrealized gain: $" + decimalFormat(getUnrealized()) + "\n"
+        + String.join("", Collections.nCopies(WIDTH, "-"));
   }
 
   @Override

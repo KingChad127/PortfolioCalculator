@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 class PositionTest {
 
   static Transaction[] transactions = {
-      new Buy("AEHR", new BigDecimal("13.08"), new BigDecimal("110"), LocalDate.of(2021, 10, 1),
+      new Buy("AEHR", 13.08, 110, LocalDate.of(2021, 10, 1),
           1),
-      new Sell("AEHR", new BigDecimal("22.71"), new BigDecimal("10"), LocalDate.of(2021, 11, 8),
+      new Sell("AEHR", 22.71, 10, LocalDate.of(2021, 11, 8),
           1),
-      new Sell("AEHR", new BigDecimal("22.64"), new BigDecimal("1"), LocalDate.of(2021, 11, 8), 2),
-      new Sell("AEHR", new BigDecimal("22.71"), new BigDecimal("92"), LocalDate.of(2021, 11, 8), 3),
-      new Sell("AEHR", new BigDecimal("22.71"), new BigDecimal("7"), LocalDate.of(2021, 11, 8), 4),
+      new Sell("AEHR", 22.64, 1, LocalDate.of(2021, 11, 8), 2),
+      new Sell("AEHR", 22.71, 92, LocalDate.of(2021, 11, 8), 3),
+      new Sell("AEHR", 22.71, 7, LocalDate.of(2021, 11, 8), 4),
   };
 
   static Position aehr = new Position("aehr");
@@ -33,13 +33,13 @@ class PositionTest {
 
   @Test
   void totalRealizedGain() {
-    Assertions.assertEquals(new BigDecimal("1059.23"), aehr.getRealized());
+    Assertions.assertEquals(1059.23, aehr.getRealized());
   }
 
   @Test
   void totalUnrealizedGain() {
-    BigDecimal unrealized = aehr.getUnrealized();
-    Assertions.assertTrue(unrealized.doubleValue() >= 0.0);
+    double unrealized = aehr.getUnrealized();
+    Assertions.assertTrue(unrealized >= 0.0);
   }
 
   @Test
