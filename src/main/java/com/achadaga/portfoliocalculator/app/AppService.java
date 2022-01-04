@@ -1,13 +1,13 @@
-package com.achadaga.portfoliotracker.app;
+package com.achadaga.portfoliocalculator.app;
 
-import static com.achadaga.portfoliotracker.app.Constants.WIDTH;
+import static com.achadaga.portfoliocalculator.app.Constants.WIDTH;
 
-import com.achadaga.portfoliotracker.entities.Buy;
-import com.achadaga.portfoliotracker.entities.Portfolio;
-import com.achadaga.portfoliotracker.entities.Position;
-import com.achadaga.portfoliotracker.entities.Sell;
-import com.achadaga.portfoliotracker.entities.Transaction;
-import com.achadaga.portfoliotracker.entities.TransactionLog;
+import com.achadaga.portfoliocalculator.entities.Buy;
+import com.achadaga.portfoliocalculator.entities.Portfolio;
+import com.achadaga.portfoliocalculator.entities.Position;
+import com.achadaga.portfoliocalculator.entities.Sell;
+import com.achadaga.portfoliocalculator.entities.Transaction;
+import com.achadaga.portfoliocalculator.entities.TransactionLog;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriterBuilder;
@@ -15,7 +15,6 @@ import com.opencsv.ICSVWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,6 +125,8 @@ public class AppService {
       char input = usrInput.nextLine().charAt(0);
       if (input == 'n' || input == 'N') {
         cont = false;
+      } else {
+        file = CSVFileChooser.openFile();
       }
     }
     return file;
@@ -303,16 +304,18 @@ public class AppService {
       try {
         FileWriter writer = new FileWriter(f);
         ICSVWriter csvWriter = new CSVWriterBuilder(writer).withSeparator(',').build();
-        csvWriter.writeNext(new String[]{"transactiontype", "ticker", "price", "quantity", "date"},
+        csvWriter.writeNext(
+            new String[]{"transactiontype", "ticker", "price", "quantity", "date", "dayorder"},
             false);
         for (Transaction transaction : transactionLog) {
-          String[] line = new String[5];
+          String[] line = new String[6];
           line[0] = transaction instanceof Buy ? "buy" : "sell";
           line[1] = transaction.getTicker();
           line[2] = Double.toString(transaction.getPrice());
           line[3] = Double.toString(transaction.getNumShares());
           LocalDate date = transaction.getDate();
           line[4] = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
+          line[5] = String.valueOf(transaction.getOfDay());
           csvWriter.writeNext(line, false);
         }
         csvWriter.close();

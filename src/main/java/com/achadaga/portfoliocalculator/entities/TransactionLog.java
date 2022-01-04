@@ -1,4 +1,6 @@
-package com.achadaga.portfoliotracker.entities;
+package com.achadaga.portfoliocalculator.entities;
+
+import static com.achadaga.portfoliocalculator.app.Constants.line;
 
 import java.time.LocalDate;
 import java.util.Iterator;
@@ -147,18 +149,21 @@ public class TransactionLog implements Iterable<Transaction> {
 
   @Override
   public String toString() {
-    StringBuilder output = new StringBuilder("Transaction History: \n");
-    for (Transaction t : log) {
-      output.append(t.toString());
-    }
-    output.append("\ntotal number of transactions: ").append(size());
-    return output.toString();
+    return "Transaction History: \n" + printSubLog();
   }
 
   public String printSubLog() {
     StringBuilder output = new StringBuilder();
-    for (Transaction t : log) {
-      output.append(t.toString());
+    int i = 0;
+    int n = log.size() - 1;
+    Iterator<Transaction> it = log.iterator();
+    while (i < n) {
+      Transaction t = it.next();
+      output.append(t).append(line);
+      i++;
+    }
+    if (it.hasNext()) {
+      output.append(it.next());
     }
     output.append("\ntotal number of transactions: ").append(size());
     return output.toString();

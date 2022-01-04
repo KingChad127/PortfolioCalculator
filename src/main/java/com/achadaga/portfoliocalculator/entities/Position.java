@@ -1,10 +1,8 @@
-package com.achadaga.portfoliotracker.entities;
+package com.achadaga.portfoliocalculator.entities;
 
-import static com.achadaga.portfoliotracker.app.Constants.WIDTH;
-import static com.achadaga.portfoliotracker.app.Constants.decimalFormat;
+import static com.achadaga.portfoliocalculator.app.Constants.decimalFormat;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -149,11 +147,10 @@ public class Position implements Comparable<Position> {
 
   @Override
   public String toString() {
-    return ticker + "\n\taverage cost per share: $" + decimalFormat(avgCostPerShare)
+    return "\n" + ticker + "\n\taverage cost per share: $" + decimalFormat(avgCostPerShare)
         + "\n\tcurrent price: $" + decimalFormat(currentPrice()) + "\n\tshares held: "
         + decimalFormat(totalSharesHeld) + "\n" + "\trealized gain: $" + decimalFormat(
-        totalRealizedGain) + "\n\tunrealized gain: $" + decimalFormat(getUnrealized()) + "\n"
-        + String.join("", Collections.nCopies(WIDTH, "-"));
+        totalRealizedGain) + "\n\tunrealized gain: $" + decimalFormat(getUnrealized()) + "\n";
   }
 
   @Override

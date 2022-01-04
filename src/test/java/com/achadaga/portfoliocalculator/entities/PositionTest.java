@@ -1,6 +1,5 @@
-package com.achadaga.portfoliotracker.entities;
+package com.achadaga.portfoliocalculator.entities;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

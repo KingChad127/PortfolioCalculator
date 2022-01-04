@@ -1,6 +1,6 @@
-package com.achadaga.portfoliotracker.entities;
+package com.achadaga.portfoliocalculator.entities;
 
-import static com.achadaga.portfoliotracker.app.Constants.WIDTH;
+import static com.achadaga.portfoliocalculator.app.Constants.WIDTH;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -14,8 +14,7 @@ public class Sell extends Transaction {
   @Override
   public String toString() {
     return super.toString() + "\n\tSELL " + getTicker() + "\n\tsale price: $" + String.format(
-        "%.2f", getPrice()) + "\n\tshares " + "sold: " + getNumShares() + "\n" + String.join("",
-        Collections.nCopies(WIDTH, "-"));
+        "%.2f", getPrice()) + "\n\tshares " + "sold: " + getNumShares() + "\n";
   }
 }
 

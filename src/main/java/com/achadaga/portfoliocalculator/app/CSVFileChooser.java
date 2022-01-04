@@ -1,4 +1,4 @@
-package com.achadaga.portfoliotracker.app;
+package com.achadaga.portfoliocalculator.app;
 
 import java.io.File;
 import javax.swing.JFileChooser;

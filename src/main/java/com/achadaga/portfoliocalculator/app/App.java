@@ -1,11 +1,11 @@
-package com.achadaga.portfoliotracker.app;
+package com.achadaga.portfoliocalculator.app;
 
-import static com.achadaga.portfoliotracker.app.Constants.WIDTH;
+import static com.achadaga.portfoliocalculator.app.Constants.WIDTH;
 
-import com.achadaga.portfoliotracker.app.Constants.MenuHeader;
-import com.achadaga.portfoliotracker.entities.Portfolio;
-import com.achadaga.portfoliotracker.entities.Position;
-import com.achadaga.portfoliotracker.entities.TransactionLog;
+import com.achadaga.portfoliocalculator.app.Constants.MenuHeader;
+import com.achadaga.portfoliocalculator.entities.Portfolio;
+import com.achadaga.portfoliocalculator.entities.Position;
+import com.achadaga.portfoliocalculator.entities.TransactionLog;
 import java.util.Collections;
 
 public class App {
@@ -123,7 +123,7 @@ public class App {
             }
           }
         }
-        // verify that the user porfolio is valid
+        // verify that the user portfolio is valid
         boolean valid = usrPortfolio.validateAndCalculatePortfolio();
         while (!valid) {
           System.out.println("one or more positions were found with less than 0 shares.");
@@ -212,6 +212,6 @@ public class App {
     AppService.saveSession(transactionLog);
 
     AppService.closeKeyboard();
-    System.out.println("thank you for using portfoliotracker and tracker");
+    System.out.println("thank you for using portfoliocalculator and tracker");
   }
 }

@@ -1,7 +1,9 @@
-package com.achadaga.portfoliotracker.entities;
+package com.achadaga.portfoliocalculator.entities;
 
-import static com.achadaga.portfoliotracker.app.Constants.decimalFormat;
+import static com.achadaga.portfoliocalculator.app.Constants.decimalFormat;
+import static com.achadaga.portfoliocalculator.app.Constants.line;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -18,7 +20,7 @@ public class Portfolio implements Iterable<Position> {
    * @param user the name of the owner of the portfolio
    */
   public Portfolio(String user) {
-    this.portfolio = new TreeMap<>();
+    this.portfolio = new HashMap<>();
     this.user = user;
   }
 
@@ -28,7 +30,7 @@ public class Portfolio implements Iterable<Position> {
    * @param map the map from which to build this portfolio
    */
   public Portfolio(Map<String, Position> map) {
-    this.portfolio = new TreeMap<>(map);
+    this.portfolio = new HashMap<>(map);
     this.user = "";
   }
 
@@ -89,7 +91,7 @@ public class Portfolio implements Iterable<Position> {
    * @return a sub portfolio of all the positions that are currently making >= $0 for the user
    */
   public Portfolio winningPositions() {
-    Map<String, Position> result = new TreeMap<>();
+    Map<String, Position> result = new HashMap<>();
     for (Position p : this) {
       double r = p.getRealized() + p.getUnrealized();
       if (r >= 0.0) {
@@ -103,7 +105,7 @@ public class Portfolio implements Iterable<Position> {
    * @return a sub portfolio of all the positions that are currently making < $0 for the user.
    */
   public Portfolio losingPositions() {
-    Map<String, Position> result = new TreeMap<>();
+    Map<String, Position> result = new HashMap<>();
     for (Position p : this) {
       double r = p.getRealized() + p.getUnrealized();
       if (r < 0.0) {
@@ -137,10 +139,16 @@ public class Portfolio implements Iterable<Position> {
   @Override
   public String toString() {
     StringBuilder output =
-        user.equals("") ? new StringBuilder() : new StringBuilder(user + "'s " + "Portfolio\n\n");
-    for (Position p : portfolio.values()) {
-      output.append(p.toString()).append('\n');
+        user.equals("") ? new StringBuilder() : new StringBuilder(user + "'s " + "Portfolio\n");
+    int i = 0; int n = portfolio.size() - 1;
+//    TreeMap<String, Position> m = new TreeMap<>(portfolio);
+    Iterator<Position> it = portfolio.values().iterator();
+    while (i < n) {
+      Position p = it.next();
+      output.append(p).append(line);
+      i++;
     }
+    output.append(it.next()).append("\n");
     output.append("total realized gains/losses: $").append(decimalFormat(totalRealized()));
     output.append("\ntotal unrealized gains/losses: $").append(decimalFormat(totalUnrealized()));
     return output.toString();

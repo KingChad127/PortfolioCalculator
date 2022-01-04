@@ -1,4 +1,4 @@
-package com.achadaga.portfoliotracker.entities;
+package com.achadaga.portfoliocalculator.entities;
 
 import java.time.LocalDate;
 import java.util.UUID;

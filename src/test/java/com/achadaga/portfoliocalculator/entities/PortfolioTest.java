@@ -1,4 +1,4 @@
-package com.achadaga.portfoliotracker.entities;
+package com.achadaga.portfoliocalculator.entities;
 
 import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
@@ -31,9 +31,8 @@ class PortfolioTest {
     Assertions.assertEquals(5, portfolio.size());
     String[] tickers = {"aapl", "aehr", "amd", "bptrx", "nvda"};
     int i = 0;
-    for (Position ticker : portfolio) {
-      Assertions.assertEquals(tickers[i], ticker.getTicker());
-      i++;
+    for (String ticker : tickers) {
+      Assertions.assertEquals(ticker, portfolio.findPosition(ticker).getTicker());
     }
   }
 
