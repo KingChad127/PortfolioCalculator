@@ -9,3 +9,4 @@ com/achadaga/portfoliotracker/entities/TransactionLog.class
 com/achadaga/portfoliotracker/entities/Buy.class
 com/achadaga/portfoliotracker/app/Constants.class
 com/achadaga/portfoliotracker/app/AppService.class
+com/achadaga/portfoliotracker/test/App.class
