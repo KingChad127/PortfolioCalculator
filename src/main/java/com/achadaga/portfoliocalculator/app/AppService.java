@@ -79,6 +79,7 @@ public class AppService {
       System.out.println("No transactions were added");
     } else {
       // try to add contents of file
+      System.out.println("Verifying...\n");
       try {
         FileReader fileReader = new FileReader(f);
         CSVReader csvReader = new CSVReaderBuilder(fileReader).build();
@@ -90,7 +91,7 @@ public class AppService {
         }
         String[] line;
         while ((line = csvReader.readNext()) != null) {
-          String ticker = line[1];
+          String ticker = line[1].toUpperCase();
           double price = Double.parseDouble(line[2]);
           double quantity = Double.parseDouble(line[3]);
           int[] d = strArrToIntArr(splitDate(line[4]));
@@ -203,6 +204,20 @@ public class AppService {
   }
 
   /**
+   * Search the transaction by a specified ticker
+   *
+   * @param transactionLog the transaction log to search through
+   * @return a transaction log containing all transactions with the specified ticker
+   */
+  public static TransactionLog searchByTicker(TransactionLog transactionLog) {
+    System.out.print("enter ticker: ");
+    String ticker = usrInput.nextLine().toUpperCase();
+    System.out.println();
+    System.out.println("transactions that meet your criteria: ");
+    return transactionLog.searchByTicker(ticker);
+  }
+
+  /**
    * Search the existing transaction log for transactions that fall on a specific date, or in a
    * range of dates
    *
@@ -212,7 +227,7 @@ public class AppService {
     System.out.print("single date or range of dates (SINGLE or RANGE): ");
     String inp = usrInput.nextLine();
     while (!inp.equalsIgnoreCase("single") && !inp.equalsIgnoreCase("range")) {
-      System.out.print("please enter SINGLE or RANGE");
+      System.out.print("please enter SINGLE or RANGE ");
       inp = usrInput.nextLine();
     }
     String prompt, reprompt;
@@ -226,7 +241,7 @@ public class AppService {
       reprompt = "please enter a valid date (MM-DD-YYYY): ";
       LocalDate end = collectDate(prompt, reprompt);
 
-      System.out.println("transactions that meet your criteria: ");
+      System.out.println("\ntransactions that meet your criteria: ");
       return transactionLog.searchByDate(start, end);
     } else {
       // collect single date
@@ -234,22 +249,9 @@ public class AppService {
       reprompt = "please enter a valid date (MM-DD-YYYY): ";
       LocalDate d = collectDate(prompt, reprompt);
 
-      System.out.println("transactions that meet your criteria: ");
+      System.out.println("\ntransactions that meet your criteria: ");
       return transactionLog.searchByDate(d);
     }
-  }
-
-  /**
-   * Search the transaction by a specified ticker
-   *
-   * @param transactionLog the transaction log to search through
-   * @return a transaction log containing all transactions with the specified ticker
-   */
-  public static TransactionLog searchByTicker(TransactionLog transactionLog) {
-    String prompt = "enter ticker: ";
-    String ticker = collectTicker(prompt);
-    System.out.println("transactions that meet your criteria: ");
-    return transactionLog.searchByTicker(ticker);
   }
 
   /**
@@ -278,8 +280,8 @@ public class AppService {
    * @return the matching Position
    */
   public static Position lookUpPosition(Portfolio p) {
-    String prompt = "enter ticker: ";
-    String ticker = collectTicker(prompt);
+    System.out.print("enter ticker: ");
+    String ticker = usrInput.nextLine().toUpperCase();
     return p.findPosition(ticker);
   }
 
@@ -314,7 +316,7 @@ public class AppService {
           line[2] = Double.toString(transaction.getPrice());
           line[3] = Double.toString(transaction.getNumShares());
           LocalDate date = transaction.getDate();
-          line[4] = date.getYear() + "-" + date.getMonthValue() + "-" + date.getDayOfMonth();
+          line[4] = date.getMonthValue() + "-" + date.getDayOfMonth() + "-" + date.getYear();
           line[5] = String.valueOf(transaction.getOfDay());
           csvWriter.writeNext(line, false);
         }
@@ -479,10 +481,7 @@ public class AppService {
     try {
       int[] d = strArrToIntArr(date);
       LocalDate localDate = LocalDate.of(d[2], d[0], d[1]);
-      if (localDate.isAfter(LocalDate.now())) {
-        return false;
-      }
-      return false;
+      return localDate.isAfter(LocalDate.now());
     } catch (Exception e) {
       return true;
     }

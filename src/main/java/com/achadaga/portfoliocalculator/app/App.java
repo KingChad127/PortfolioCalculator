@@ -1,6 +1,7 @@
 package com.achadaga.portfoliocalculator.app;
 
 import static com.achadaga.portfoliocalculator.app.Constants.WIDTH;
+import static com.achadaga.portfoliocalculator.app.Constants.line;
 
 import com.achadaga.portfoliocalculator.app.Constants.MenuHeader;
 import com.achadaga.portfoliocalculator.entities.Portfolio;
@@ -22,7 +23,7 @@ public class App {
    * @return an empty portfolio
    */
   public Portfolio intro() {
-    System.out.println("PortfolioTracker pre-release v0.2.1 - Abhinav Chadaga");
+    System.out.println("PortfolioTracker v1.0.0 - Abhinav Chadaga");
     String userName = AppService.username();
     return new Portfolio(userName);
   }
@@ -154,19 +155,22 @@ public class App {
         while (tmChoice != 6) {
           if (tmChoice == 1) {
             System.out.println(AppService.searchByTicker(transactionLog).printSubLog());
+            System.out.println(line);
           } else if (tmChoice == 2) {
             System.out.println(AppService.searchByDate(transactionLog).printSubLog());
+            System.out.println(line);
           } else if (tmChoice == 3) {
             System.out.println("all BUY transactions");
             System.out.println(transactionLog.buys().printSubLog());
-            System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
+            System.out.println(line);
           } else if (tmChoice == 4) {
             System.out.println("all SELL transactions");
             System.out.println(transactionLog.sells().printSubLog());
-            System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
+            System.out.println(line);
           } else if (tmChoice == 5) {
             System.out.println(
                 AppService.removeTransactions(transactionLog, usrPortfolio).printSubLog());
+            System.out.println(line);
           }
           tmChoice = transactionLogPostMenu();
         }
@@ -187,18 +191,18 @@ public class App {
           } else if (pChoice == 2) {
             Portfolio winning = usrPortfolio.winningPositions();
             if (winning.size() == 0) {
-              System.out.println("there are 0 winning positions\n");
+              System.out.println("there are 0 winning positions");
             } else {
-              System.out.println("all winning positions: \n");
+              System.out.println("all winning positions: ");
               System.out.println(winning);
             }
             System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));
           } else if (pChoice == 3) {
             Portfolio losing = usrPortfolio.losingPositions();
             if (losing.size() == 0) {
-              System.out.println("there are 0 losing positions\n");
+              System.out.println("there are 0 losing positions");
             } else {
-              System.out.println("all losing positions: \n");
+              System.out.println("all losing positions: ");
               System.out.println(losing);
             }
             System.out.println(String.join("", Collections.nCopies(WIDTH, "-")));

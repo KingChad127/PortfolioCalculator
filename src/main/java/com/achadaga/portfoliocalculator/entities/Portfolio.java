@@ -3,10 +3,14 @@ package com.achadaga.portfoliocalculator.entities;
 import static com.achadaga.portfoliocalculator.app.Constants.decimalFormat;
 import static com.achadaga.portfoliocalculator.app.Constants.line;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectStreamClass;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Portfolio implements Iterable<Position> {
 
@@ -141,7 +145,6 @@ public class Portfolio implements Iterable<Position> {
     StringBuilder output =
         user.equals("") ? new StringBuilder() : new StringBuilder(user + "'s " + "Portfolio\n");
     int i = 0; int n = portfolio.size() - 1;
-//    TreeMap<String, Position> m = new TreeMap<>(portfolio);
     Iterator<Position> it = portfolio.values().iterator();
     while (i < n) {
       Position p = it.next();

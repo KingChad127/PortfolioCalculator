@@ -4,7 +4,6 @@ import static com.achadaga.portfoliocalculator.app.Constants.decimalFormat;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import yahoofinance.YahooFinance;
@@ -13,6 +12,7 @@ public class Position implements Comparable<Position> {
 
   private final String ticker;
   private final Set<Transaction> history; // contains all transactions of this ticker
+  private final double currentPrice;
   private double totalCostOfPurchasedShares;
   private double totalSharesHeld;
   private double totalSharesBought;
@@ -22,6 +22,7 @@ public class Position implements Comparable<Position> {
   public Position(String ticker) {
     this.ticker = ticker;
     this.history = new HashSet<>();
+    this.currentPrice = currentPrice();
   }
 
   /**
@@ -49,9 +50,7 @@ public class Position implements Comparable<Position> {
    */
   public boolean calculate() {
     TreeSet<Transaction> sorted = new TreeSet<>(history);
-    Iterator<Transaction> reverseIt = sorted.descendingIterator();
-    while (reverseIt.hasNext()) {
-      Transaction t = reverseIt.next();
+    for (Transaction t : sorted) {
       double numShares = t.getNumShares();
       double price = t.getPrice();
 
@@ -93,7 +92,7 @@ public class Position implements Comparable<Position> {
    * be made from selling the current shares held.
    */
   public double getUnrealized() {
-    double diff = currentPrice() - avgCostPerShare;
+    double diff = currentPrice - avgCostPerShare;
     return diff * totalSharesHeld;
   }
 
@@ -136,7 +135,7 @@ public class Position implements Comparable<Position> {
       return YahooFinance.get(ticker).getQuote().getPrice().doubleValue();
     } catch (IOException e) {
       System.out.println("Error");
-      return -1.0;
+      return 0.0;
     }
   }
 

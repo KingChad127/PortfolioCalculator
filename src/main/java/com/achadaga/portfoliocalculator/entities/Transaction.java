@@ -6,7 +6,7 @@ import java.util.UUID;
 public abstract class Transaction implements Comparable<Transaction> {
 
   // data
-  private final String ticker;
+  private final String ticker; // UPPER CASE
   private final double price;
   private final double numShares; // support fractional shares as well
   private final LocalDate date;
@@ -68,19 +68,19 @@ public abstract class Transaction implements Comparable<Transaction> {
 
   /**
    * @param other transaction to compare this one to
-   * @return a positive number if this transaction is older than other, negative otherwise. Break
+   * @return a positive number if this transaction is newer than other, negative otherwise. Break
    * ties using the UUID but in theory shouldn't be used
    */
   @Override
   public int compareTo(Transaction other) {
-    int dateComparison = other.date.compareTo(this.getDate());
+    int dateComparison = this.date.compareTo(other.getDate());
     if (dateComparison != 0) {
       return dateComparison;
     }
     if (this.dayOrder != other.getOfDay()) {
-      return other.dayOrder - this.dayOrder;
+      return this.dayOrder - other.dayOrder;
     }
-    return other.transactionID.compareTo(this.transactionID);
+    return this.transactionID.compareTo(other.transactionID);
   }
 
   @Override
