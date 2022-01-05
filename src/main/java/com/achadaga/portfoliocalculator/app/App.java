@@ -1,7 +1,8 @@
 package com.achadaga.portfoliocalculator.app;
 
 import static com.achadaga.portfoliocalculator.app.Constants.WIDTH;
-import static com.achadaga.portfoliocalculator.app.Constants.line;
+import static com.achadaga.portfoliocalculator.app.Constants.LINE;
+import static com.achadaga.portfoliocalculator.app.Constants.OPTIONS;
 
 import com.achadaga.portfoliocalculator.app.Constants.MenuHeader;
 import com.achadaga.portfoliocalculator.entities.Portfolio;
@@ -23,7 +24,7 @@ public class App {
    * @return an empty portfolio
    */
   public Portfolio intro() {
-    System.out.println("PortfolioTracker v1.0.0 - Abhinav Chadaga");
+    System.out.println("PortfolioCalculator v1.0.1 - Abhinav Chadaga");
     String userName = AppService.username();
     return new Portfolio(userName);
   }
@@ -54,7 +55,7 @@ public class App {
    * @return the user's menu choice
    */
   public int transactionLogPostMenu() {
-    System.out.println("Options: ");
+    System.out.println(OPTIONS);
     System.out.println("\t1. search transactions by ticker");
     System.out.println("\t2. search transactions by date");
     System.out.println("\t3. list all BUY transactions");
@@ -70,7 +71,7 @@ public class App {
    * @return the user's menu choice
    */
   public int transactionLogPreMenu() {
-    System.out.println("Options: ");
+    System.out.println(OPTIONS);
     System.out.println("\t1. select a valid transaction input file");
     System.out.println("\t2. enter transactions manually");
     System.out.println("\t3. back");
@@ -83,7 +84,7 @@ public class App {
    * @return the user's menu choice
    */
   public int portfolioMenu() {
-    System.out.println("Options: ");
+    System.out.println(OPTIONS);
     System.out.println("\t1. look up position");
     System.out.println("\t2. list winning positions");
     System.out.println("\t3. list losing positions");
@@ -92,7 +93,7 @@ public class App {
   }
 
   public int portfolioValidationMenu() {
-    System.out.println("Options: ");
+    System.out.println(OPTIONS);
     System.out.println("\t1. edit your transaction file then select this option");
     System.out.println("\t2. add more positions manually");
     System.out.println("\t3. remove transactions manually");
@@ -155,22 +156,22 @@ public class App {
         while (tmChoice != 6) {
           if (tmChoice == 1) {
             System.out.println(AppService.searchByTicker(transactionLog).printSubLog());
-            System.out.println(line);
+            System.out.println(LINE);
           } else if (tmChoice == 2) {
             System.out.println(AppService.searchByDate(transactionLog).printSubLog());
-            System.out.println(line);
+            System.out.println(LINE);
           } else if (tmChoice == 3) {
             System.out.println("all BUY transactions");
             System.out.println(transactionLog.buys().printSubLog());
-            System.out.println(line);
+            System.out.println(LINE);
           } else if (tmChoice == 4) {
             System.out.println("all SELL transactions");
             System.out.println(transactionLog.sells().printSubLog());
-            System.out.println(line);
+            System.out.println(LINE);
           } else if (tmChoice == 5) {
             System.out.println(
                 AppService.removeTransactions(transactionLog, usrPortfolio).printSubLog());
-            System.out.println(line);
+            System.out.println(LINE);
           }
           tmChoice = transactionLogPostMenu();
         }
@@ -216,6 +217,6 @@ public class App {
     AppService.saveSession(transactionLog);
 
     AppService.closeKeyboard();
-    System.out.println("thank you for using portfoliocalculator and tracker");
+    System.out.println("thank you for using PortfolioCalculator");
   }
 }

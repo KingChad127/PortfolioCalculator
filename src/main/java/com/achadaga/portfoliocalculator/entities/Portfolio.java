@@ -1,21 +1,16 @@
 package com.achadaga.portfoliocalculator.entities;
 
 import static com.achadaga.portfoliocalculator.app.Constants.decimalFormat;
-import static com.achadaga.portfoliocalculator.app.Constants.line;
+import static com.achadaga.portfoliocalculator.app.Constants.LINE;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectStreamClass;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class Portfolio implements Iterable<Position> {
 
   // internal storage container
-  private final Map<String, Position> portfolio;
+  private final Map<String, Position> container;
   private final String user;
 
   /**
@@ -24,7 +19,7 @@ public class Portfolio implements Iterable<Position> {
    * @param user the name of the owner of the portfolio
    */
   public Portfolio(String user) {
-    this.portfolio = new HashMap<>();
+    this.container = new HashMap<>();
     this.user = user;
   }
 
@@ -34,7 +29,7 @@ public class Portfolio implements Iterable<Position> {
    * @param map the map from which to build this portfolio
    */
   public Portfolio(Map<String, Position> map) {
-    this.portfolio = new HashMap<>(map);
+    this.container = new HashMap<>(map);
     this.user = "";
   }
 
@@ -45,28 +40,28 @@ public class Portfolio implements Iterable<Position> {
    * @param t the transaction to add
    */
   public void addTransaction(Transaction t) {
-    if (!portfolio.containsKey(t.getTicker())) {
-      portfolio.put(t.getTicker(), new Position(t.getTicker()));
+    if (!container.containsKey(t.getTicker())) {
+      container.put(t.getTicker(), new Position(t.getTicker()));
     }
-    portfolio.get(t.getTicker()).addTransaction(t);
+    container.get(t.getTicker()).addTransaction(t);
   }
 
   /**
    * Empty out the user's portfolio while keeping the user's name
    */
   public void resetPortfolio() {
-    portfolio.clear();
+    container.clear();
   }
 
   /**
    * @return the number of positions the user holds
    */
   public int size() {
-    return portfolio.size();
+    return container.size();
   }
 
   public Position findPosition(String ticker) {
-    return portfolio.get(ticker);
+    return container.get(ticker);
   }
 
   /**
@@ -74,7 +69,7 @@ public class Portfolio implements Iterable<Position> {
    */
   private double totalRealized() {
     double total = 0.0;
-    for (Position p : portfolio.values()) {
+    for (Position p : container.values()) {
       total += p.getRealized();
     }
     return total;
@@ -85,7 +80,7 @@ public class Portfolio implements Iterable<Position> {
    */
   private double totalUnrealized() {
     double total = 0.0;
-    for (Position p : portfolio.values()) {
+    for (Position p : container.values()) {
       total += p.getUnrealized();
     }
     return total;
@@ -120,8 +115,8 @@ public class Portfolio implements Iterable<Position> {
   }
 
   /**
-   * Validate the user portfolio by ensuring that all positions have a non-negative number of
-   * shares and that transaction history never went negative
+   * Validate the user portfolio by ensuring that all positions have a non-negative number of shares
+   * and that transaction history never went negative
    *
    * @return true if this portfolio is valid, false otherwise
    */
@@ -137,18 +132,19 @@ public class Portfolio implements Iterable<Position> {
 
   @Override
   public Iterator<Position> iterator() {
-    return portfolio.values().iterator();
+    return container.values().iterator();
   }
 
   @Override
   public String toString() {
     StringBuilder output =
         user.equals("") ? new StringBuilder() : new StringBuilder(user + "'s " + "Portfolio\n");
-    int i = 0; int n = portfolio.size() - 1;
-    Iterator<Position> it = portfolio.values().iterator();
+    int i = 0;
+    int n = container.size() - 1;
+    Iterator<Position> it = container.values().iterator();
     while (i < n) {
       Position p = it.next();
-      output.append(p).append(line);
+      output.append(p).append(LINE);
       i++;
     }
     output.append(it.next()).append("\n");

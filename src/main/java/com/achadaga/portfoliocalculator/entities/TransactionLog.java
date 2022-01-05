@@ -1,6 +1,6 @@
 package com.achadaga.portfoliocalculator.entities;
 
-import static com.achadaga.portfoliocalculator.app.Constants.line;
+import static com.achadaga.portfoliocalculator.app.Constants.LINE;
 
 import java.time.LocalDate;
 import java.util.Iterator;
@@ -159,7 +159,7 @@ public class TransactionLog implements Iterable<Transaction> {
     Iterator<Transaction> it = log.iterator();
     while (i < n) {
       Transaction t = it.next();
-      output.append(t).append(line);
+      output.append(t).append(LINE);
       i++;
     }
     if (it.hasNext()) {
@@ -177,7 +177,7 @@ public class TransactionLog implements Iterable<Transaction> {
   @Override
   public boolean equals(Object obj) {
     // check obj class
-    if (obj.getClass() != this.getClass()) {
+    if (obj == null || obj.getClass() != this.getClass()) {
       return false;
     }
     TransactionLog other = (TransactionLog) obj;

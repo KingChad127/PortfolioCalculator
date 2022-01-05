@@ -148,8 +148,8 @@ public class Position implements Comparable<Position> {
   public String toString() {
     return "\n" + ticker + "\n\taverage cost per share: $" + decimalFormat(avgCostPerShare)
         + "\n\tcurrent price: $" + decimalFormat(currentPrice()) + "\n\tshares held: "
-        + decimalFormat(totalSharesHeld) + "\n" + "\trealized gain: $" + decimalFormat(
-        totalRealizedGain) + "\n\tunrealized gain: $" + decimalFormat(getUnrealized()) + "\n";
+        + decimalFormat(totalSharesHeld) + "\n" + "\trealized gain/loss: $" + decimalFormat(
+        totalRealizedGain) + "\n\tunrealized gain/loss: $" + decimalFormat(getUnrealized()) + "\n";
   }
 
   @Override
