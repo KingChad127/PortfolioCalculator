@@ -13,8 +13,8 @@ import java.util.Collections;
 public class App {
 
   public static void main(String[] args) {
-    App stockportfolio = new App();
-    stockportfolio.run();
+    App app = new App();
+    app.run();
   }
 
   /**
