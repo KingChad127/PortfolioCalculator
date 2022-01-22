@@ -50,7 +50,7 @@ public class App {
   }
 
   /**
-   * Display the transaction log menu after the user has viewed they're log
+   * Display the transaction log menu after the user has viewed their log
    *
    * @return the user's menu choice
    */
